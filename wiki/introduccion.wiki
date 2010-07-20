@@ -1,0 +1,8 @@
+#summary Información básica de Series Notifier.
+
+= Información básica =
+
+
+La aplicación Series Notifier, es un notificador de series para dispositivos android basado en la API de thetvdb.
+
+Para el desarrollo se cuenta con la KEY DA1EB5795C5090A1
