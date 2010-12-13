@@ -20,7 +20,7 @@
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="10dip"
-	        android:text="No se han encontrado coincidencias, prueba a añadirla a la lista de series:"/>
+	        android:text="@string/emptySerieSearch"/>
         
     	<EditText
         android:id="@+id/entry_new"

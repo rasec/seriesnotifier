@@ -34,9 +34,9 @@ public class NewSerie extends Activity{
 	    	//SeriesUtils.addSerie(SeriesUtils.OWNSERIES, serie, getApplicationContext());
 	    	
 	    	if(ret >= 0)
-	    		message = "Serie " + serie + " añadida correctamente";
+	    		message = getString(R.string.addSuccess) + serie;
 	    	else
-	    		message = "No se ha añadido la serie " + serie +", ya existia";
+	    		message = getString(R.string.addAlreadyExists) + serie;
     		showDialog(message);
 	    		
 	    }
@@ -46,7 +46,7 @@ public class NewSerie extends Activity{
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 	    dialog.setMessage(message)
 	    .setCancelable(false)
-	    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	    .setPositiveButton(getString(R.string.Ok), new DialogInterface.OnClickListener() {
 	           public void onClick(DialogInterface dialog, int id) {
 	                dialog.cancel();
 	           }
@@ -59,7 +59,7 @@ public class NewSerie extends Activity{
 	    switch(id) {
 		    case NEW_SERIE_DIALOG:
 		        // do the work to define the pause Dialog
-		    	dialog.setTitle("Serie Añadida");
+		    	dialog.setTitle(getString(R.string.addSuccess));
 		        break;
 		    default:
 		        dialog = null;

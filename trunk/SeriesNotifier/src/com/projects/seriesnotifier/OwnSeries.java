@@ -75,15 +75,15 @@ public class OwnSeries extends ListActivity {
 	    
 	    // Create the Notification with an icon, a text and a time
 	    int icon = R.drawable.icon;
-	    CharSequence text = "Nuevo episodio de " + serie;
+	    CharSequence text = getString(R.string.newEpisode) + serie;
 	    long when = System.currentTimeMillis();
 	    Notification note = new Notification(icon, text, when);
 	    //note.defaults |= Notification.DEFAULT_VIBRATE;
 	    
 	    // Create the expanded message and the Intent
 	    Context context = getApplicationContext();
-	    CharSequence title = "Nuevo episodio de " + serie;
-	    CharSequence contText = "Existe un nuevo capítulo de la serie " + serie + " a punto de emitirse";
+	    CharSequence title = getString(R.string.newEpisode) + serie;
+	    CharSequence contText = getString(R.string.newEpisodeAdvise) + serie;
 	    Intent notificationIntent = new Intent(this, NewEpisode.class);
 	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 	    
@@ -107,9 +107,9 @@ public class OwnSeries extends ListActivity {
 			setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, empty));
 		}
 		if(ret >= 0)
-	 		message = "Serie " + serie + " Eliminada correctamente";
+	 		message = getString(R.string.delSerie) + serie;
 	 	else if(ret == -1)
-	 		message = "No se ha elimindo la serie " + serie +", ya que no existia";
+	 		message = getString(R.string.delSerieNotExists) + serie;
 	 	showDialog(message);
 	}
 	
@@ -118,7 +118,7 @@ public class OwnSeries extends ListActivity {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 		dialog.setMessage(message)
 		.setCancelable(false)
-		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		.setPositiveButton(getString(R.string.Ok), new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int id) {
 		       dialog.cancel();
 		  }
@@ -128,9 +128,9 @@ public class OwnSeries extends ListActivity {
 	
 	public void showConfirmDialog(CharSequence serie){
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-    	dialog.setMessage("¿Desea eliminar la serie '" + serie + "' de su lista de series?")
-    	.setPositiveButton("OK", new CommandDeleteSerie(serie))
-    	.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+    	dialog.setMessage(getString(R.string.askToDelete) + serie)
+    	.setPositiveButton(getString(R.string.Ok), new CommandDeleteSerie(serie))
+    	.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 	           public void onClick(DialogInterface dialog, int id) {
 	                dialog.dismiss();
 	           }
@@ -140,7 +140,7 @@ public class OwnSeries extends ListActivity {
     }
 	
 	public void showOptionsDialog(CharSequence serie){
-		CharSequence[] options = {"Notificar", "Eliminar"};
+		CharSequence[] options = {getString(R.string.notify), getString(R.string.delete)};
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
     	dialog.setItems(options, new CommandLongClick(serie));
     	AlertDialog alert = dialog.create();

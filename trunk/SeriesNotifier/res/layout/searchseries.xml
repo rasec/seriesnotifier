@@ -8,7 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="Escriba el nombre de una serie para buscar:"/>
+        android:text="@string/textInputSerieSearch"/>
                 
     <AutoCompleteTextView android:id="@+id/autocomplete_serie"
         android:layout_width="fill_parent"
