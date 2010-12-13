@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+         android:orientation="vertical"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:paddingLeft="8dp"
+         android:paddingRight="8dp">
+
+	<ListView android:id="@id/android:list"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:drawSelectorOnTop="false"/>
+
+	<RelativeLayout	android:id="@id/android:empty"
+    	android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+               
+		<TextView
+	        android:id="@+id/label_new"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dip"
+	        android:text="No se han encontrado coincidencias, prueba a añadirla a la lista de series:"/>
+        
+    	<EditText
+        android:id="@+id/entry_new"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background"
+        android:layout_marginTop="10dip"
+        android:singleLine="true"
+        android:layout_below="@id/label_new"        
+        />
+        
+    <Button
+        android:id="@+id/ok_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/entry_new"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dip"
+        android:width="100dip"
+        android:text="Añadir" />
+               		
+	</RelativeLayout>
+ </LinearLayout>
