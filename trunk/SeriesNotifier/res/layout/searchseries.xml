@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+	<TextView
+        android:id="@+id/label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Escriba el nombre de una serie para buscar:"/>
+                
+    <AutoCompleteTextView android:id="@+id/autocomplete_serie"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label"
+        android:background="@android:drawable/editbox_background"
+        android:singleLine="true"
+        android:layout_marginTop="10dip"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"/>
+        
+    <Button
+        android:id="@+id/ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/autocomplete_serie"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dip"
+        android:width="100dip"
+        android:text="Buscar" />
+    
+</RelativeLayout>
