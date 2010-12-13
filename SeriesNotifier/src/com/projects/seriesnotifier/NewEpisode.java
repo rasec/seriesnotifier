@@ -11,7 +11,7 @@ public class NewEpisode extends Activity{
 		super.onCreate(savedInstanceState);
 		
 		TextView text = new TextView(this);
-		text.setText("Existe una nueva serie apunto de ser emitida de la lista de series elegida");
+		text.setText(R.string.newEpisdeProv);
 		setContentView(text);
 	}
 

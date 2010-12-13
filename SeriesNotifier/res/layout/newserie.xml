@@ -7,7 +7,7 @@
         android:id="@+id/label_new"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Escriba el nombre de una serie para añadir:"/>
+        android:text="@string/textInputSerieAdd"/>
         
     <EditText
         android:id="@+id/entry_new"

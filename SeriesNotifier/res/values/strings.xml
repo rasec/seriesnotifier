@@ -5,12 +5,15 @@
     <string name="own_series">Series Elegidas</string>
     <string name="settings">Opciones</string>
     
+    <string name="search">Buscar</string>
+    <string name="my_series">Mis Series</string>
+    
+    
     <string name="hello">Hello World, Notifier!</string>
     <string name="head"> Series Notifier </string>
     <string name="body"> Series Notifier es un notificador de series para android </string>
+        
     
-    
-    <string name="search">Busca una serie para seguir</string>
 	<string name="new_search">SeriesNotifier - Resultados de la busqueda</string>
     <string name="newserie">SeriesNotifier - Nueva Serie</string>
     <string name="new_episode">SeriesNotifier - Nuevo episodio</string>
@@ -18,4 +21,37 @@
     <string name="getSeries">http://www.thetvdb.com/api/GetSeries.php</string>
     <string name="getSeriesParam">seriesname</string>
     
+    <string name="newEpisdeProv">Existe una nueva serie apunto de ser emitida de la lista de series elegida</string>
+    <string name="optionsProv">Aquí irán las propiedades u opciones de la aplicación</string>
+    
+    <string name="askToAddSerie">¿Desea añadir a su lista de series: </string>
+    
+    <string name="Ok">Ok</string>
+    <string name="cancel">Cancelar</string>
+    
+    <string name="addSuccess">Serie añadida correctamente: </string>
+    <string name="addAlreadyExists">No se ha añadido la serie, ya existia: </string>
+    <string name="addNotExists">No se ha añadido la serie, no existe ninguna serie con el nombre: </string>
+    
+    <string name="newEpisode">Nuevo episodio de: </string>
+    <string name="newEpisodeAdvise">Existe un nuevo capítulo apunto de emitirse: </string>
+    
+    <string name="delSerie">Serie eliminada correctamente: </string>
+    <string name="delSerieNotExists">No se ha eliminado (no existia): </string>
+    <string name="askToDelete">¿Desea eliminar de su lista de series: </string>
+    
+    
+    <string name="notify">Notificar</string>
+    <string name="delete">Eliminar</string>
+    
+    <string name="searching">Buscando...</string>
+    
+    <string name="textInputSerieSearch">Escriba el nombre de una serie para buscar:</string>
+    <string name="textInputSerieAdd">Escriba el nombre de una serie para añadir:</string>
+    <string name="emptySerieSearch">No se han encontrado coincidencias, prueba a añadirla a la lista de series:</string>
+     
+    
+    
+    
 </resources>
+

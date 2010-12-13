@@ -29,20 +29,20 @@ public class Notifier extends TabActivity {
         intent = new Intent().setClass(this, SearchSeries.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("SearchSeries").setIndicator("Buscar",
+        spec = tabHost.newTabSpec("SearchSeries").setIndicator(getString(R.string.search),
                           res.getDrawable(R.drawable.arrow_up_selected))
                       .setContent(intent);
         tabHost.addTab(spec);
 
         // Do the same for the other tabs
         intent = new Intent().setClass(this, OwnSeries.class);
-        spec = tabHost.newTabSpec("OwnSeries").setIndicator("Mis Series",
+        spec = tabHost.newTabSpec("OwnSeries").setIndicator(getString(R.string.my_series),
                           res.getDrawable(R.drawable.copy_unselected))
                       .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, Settings.class);
-        spec = tabHost.newTabSpec("Settings").setIndicator("Opciones",
+        spec = tabHost.newTabSpec("Settings").setIndicator(getString(R.string.settings),
                           res.getDrawable(R.drawable.options_unselected))
                       .setContent(intent);
         tabHost.addTab(spec);

@@ -30,7 +30,7 @@ public class Settings extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
                 
-        String text = "Aquí irán las propiedades u opciones de la aplicación";
+        String text = getString(R.string.optionsProv);
                 
         TextView textview = new TextView(this);
         textview.setText(text);

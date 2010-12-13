@@ -93,21 +93,20 @@ public class NewSearch extends ListActivity {
 		//int ret = SeriesUtils.addSerie(SeriesUtils.OWNSERIES, serie.toString(), getApplicationContext());
 		int ret = (int) SeriesUtils.addDBSerie(serie.toString(), getApplicationContext());
 		if (ret >= 0)
-			toRet = "Serie " + serie + " añadida correctamente";
+			toRet = getString(R.string.addSuccess) + serie;
 		else if (ret == -1)
-			toRet = "No se ha añadido la serie " + serie + ", ya existia";
+			toRet = getString(R.string.addAlreadyExists) + serie;
 		else if (ret == -2)
-			toRet = "No se ha añadido la serie " + serie
-					+ ", No existe ninguna serie con ese nombre";
+			toRet = getString(R.string.addNotExists) + serie;
 		showDialog(toRet);
 	}
 
 	public void showConfirmDialog(String serie) {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 		dialog.setMessage(
-				"¿Desea añadir la serie '" + serie + "' a su lista de series?")
-				.setPositiveButton("OK", new CommandAddSerie(serie))
-				.setNegativeButton("Cancelar",
+				getString(R.string.askToAddSerie) + serie)
+				.setPositiveButton(getString(R.string.Ok), new CommandAddSerie(serie))
+				.setNegativeButton(getString(R.string.cancel),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								dialog.dismiss();
@@ -145,9 +144,9 @@ public class NewSearch extends ListActivity {
 			// getApplicationContext());
 
 			if (ret >= 0)
-				message = "Serie " + serie + " añadida correctamente al listado de series";
+				message = getString(R.string.addSuccess) + serie;
 			else
-				message = "No se ha añadido la serie " + serie + ", ya existia";
+				message = getString(R.string.addAlreadyExists) + serie;
 			showDialog(message);
 
 		}
@@ -156,7 +155,7 @@ public class NewSearch extends ListActivity {
 	public void showDialog(String message) {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 		dialog.setMessage(message).setCancelable(false)
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				.setPositiveButton(getString(R.string.Ok), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.cancel();
 					}
