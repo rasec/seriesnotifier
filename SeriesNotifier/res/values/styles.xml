@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="ListItem">
+		<item name="android:padding">10dp</item>
+		<item name="android:textSize">16sp</item>		
+	</style>
+	
+	<style name="LinearLayout">
+		<item name="android:paddingLeft">8dp</item>
+		<item name="android:paddingRight">8dp</item>		
+	</style>
+	
+	<style name="TextNormal">
+		<item name="android:layout_marginTop">10dip</item>
+	</style>
+	
+	<style name="ButtonMargin">
+		<item name="android:layout_centerHorizontal">true</item>
+		<item name="android:layout_marginTop">5dip</item>
+		<item name="android:width">100dip</item>		
+	</style>	
+	
+	<style name="Tabs">
+		<item name="android:padding">5dp</item>		
+	</style>
+	
+	<style name="Button">
+		<item name="android:layout_centerHorizontal">true</item>
+		<item name="android:width">100dip</item>
+	</style>
+	
+	<style name="Autocomplete">
+		<item name="android:singleLine">true</item>
+		<item name="android:layout_marginTop">10dip</item>
+		<item name="android:layout_marginRight">5dp</item>
+		<item name="android:layout_marginLeft">5dp</item>		
+	</style>
+	
+</resources>

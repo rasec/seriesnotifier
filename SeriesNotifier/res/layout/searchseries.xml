@@ -7,7 +7,7 @@
         android:id="@+id/label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
+        style="@style/TextNormal"
         android:text="@string/textInputSerieSearch"/>
                 
     <AutoCompleteTextView android:id="@+id/autocomplete_serie"
@@ -16,9 +16,7 @@
         android:layout_below="@id/label"
         android:background="@android:drawable/editbox_background"
         android:singleLine="true"
-        android:layout_marginTop="10dip"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"/>
+        style="@style/Autocomplete"/>
         
     <Button
         android:id="@+id/ok"

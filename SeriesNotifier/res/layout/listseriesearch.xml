@@ -3,8 +3,7 @@
          android:orientation="vertical"
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
-         android:paddingLeft="8dp"
-         android:paddingRight="8dp">
+         style="@style/LinearLayout">
 
 	<ListView android:id="@id/android:list"
                android:layout_width="fill_parent"
@@ -19,7 +18,7 @@
 	        android:id="@+id/label_new"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dip"
+	        style="@style/TextNormal"	        
 	        android:text="@string/emptySerieSearch"/>
         
     	<EditText
@@ -27,8 +26,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/editbox_background"
-        android:layout_marginTop="10dip"
-        android:singleLine="true"
+        style="@style/TextNormal"
         android:layout_below="@id/label_new"        
         />
         
@@ -37,10 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/entry_new"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dip"
-        android:width="100dip"
-        android:text="Añadir" />
+        style="@style/ButtonMargin"
+        android:text="@string/add" />
                		
 	</RelativeLayout>
  </LinearLayout>
