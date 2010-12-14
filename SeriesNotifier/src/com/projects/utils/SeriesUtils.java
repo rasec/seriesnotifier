@@ -13,6 +13,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -63,9 +64,9 @@ public class SeriesUtils {
 	  
 	  }
 	  
-	  public static String[] getSeries(Context context, String tipo){
+	  public static List<String> getSeries(Context context, String tipo){
 		  if(tipo == SERIES){
-			  return getListSeries(context);
+			  return getListSeriesList(context);
 			  
 		  }else if(tipo == OWNSERIES){
 			  //return getOwnSeries(context);
@@ -99,6 +100,29 @@ public class SeriesUtils {
 		
 		return list;
 	}
+	  
+	  public static List<String> getListSeriesList(Context context){
+			List<String> list = new ArrayList<String>();
+			String names;
+			FileInputStream fis;
+			list = Arrays.asList(context.fileList());
+			if(!list.isEmpty()){
+				try {
+					fis = context.openFileInput(SERIES);
+					names = fileToString(fis);
+					list = Arrays.asList(names.split(","));
+					fis.close();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			return list;
+		}
 	  
 	public static String[] getOwnSeries(Context context){
 		String[] listFiles = null;
@@ -162,13 +186,13 @@ public class SeriesUtils {
 			// No exist�a la serie
 			ret = -1;
 		}else{
-			String[] list = getSeries(context, file);
-			if(list != null && list.length > 1){
+			List<String> list = getSeries(context, file);
+			if(!list.isEmpty()){
 				int i = 0,j = 0;
-				String[] listAux = new String[list.length-1];
+				List<String> listAux = new ArrayList<String>();
 				for (String item : list) {
 					if(!item.toLowerCase().equals(serie.toLowerCase())){
-						listAux[i] = list[j];
+						listAux.add(item);
 						i++;
 					}
 					j++;
@@ -208,10 +232,10 @@ public class SeriesUtils {
 		return ret;
 	}
 	
-	private static String toSimpleString(String[] listAux) {
-		String ret = listAux[0];
-		for (int i = 1; i < listAux.length; i++) {
-			ret += "," + listAux[i];
+	private static String toSimpleString(List<String> listAux) {
+		String ret = listAux.get(0);
+		for (int i = 1; i < listAux.size(); i++) {
+			ret += "," + listAux.get(i);
 		}
 		return ret;
 	}
@@ -260,8 +284,8 @@ public class SeriesUtils {
 		return exists;
 	}
 
-	public static String[] getSeriesByQuery(Context applicationContext,	String query) {
-		String[] list = null;
+	public static List<String> getSeriesByQuery(Context applicationContext,	String query) {
+		List<String> list = null;
 		//String[] list = new String[100];
 		/*String names;
 		FileInputStream fis;
@@ -282,7 +306,7 @@ public class SeriesUtils {
 				e.printStackTrace();
 			}
 		}*/
-		list = getSeriesTvDB(query, applicationContext).split(",");
+		list = Arrays.asList(getSeriesTvDB(query, applicationContext).split(","));
 		
 		return list;
 	}
@@ -312,7 +336,7 @@ public class SeriesUtils {
 	
 	/* DataBase Methods */
 		
-	public static String[] getDBSeries(Context context)
+	public static List<String> getDBSeries(Context context)
 	{
 		DBAdapter db = new DBAdapter(context);
 		String[] ret = null;
@@ -337,7 +361,7 @@ public class SeriesUtils {
 		}
   
 		db.close();
-		return ret;		  
+		return Arrays.asList(ret);		  
 	}
 	
 	public static long addDBSerie(String serie, Context context){

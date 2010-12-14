@@ -10,7 +10,8 @@
         style="@style/TextNormal"
         android:text="@string/textInputSerieSearch"/>
                 
-    <AutoCompleteTextView android:id="@+id/autocomplete_serie"
+    <AutoCompleteTextView 
+    	android:id="@+id/autocomplete_serie"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/label"

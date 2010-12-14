@@ -1,28 +1,41 @@
 package com.projects.seriesnotifier;
 
 import java.util.EventObject;
+import java.util.List;
 
+import com.projects.adapters.IconListViewAdapter;
+import com.projects.seriesnotifier.OwnSeries.CommandLongClick;
 import com.projects.utils.SeriesUtils;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 public class NewSearch extends ListActivity {
 
@@ -51,40 +64,28 @@ public class NewSearch extends ListActivity {
 	}
 
 	public void getSeries(String query) {
-		String[] series = SeriesUtils.getSeriesByQuery(getApplicationContext(),
+		List<String> series = SeriesUtils.getSeriesByQuery(getApplicationContext(),
 				query);
-		if (series != null && series.length > 0) {
-
-			setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
-					series));
+		if (!series.isEmpty()) {
+			setListAdapter(new IconListViewAdapterAdd(this, R.layout.list_item_icon, series, R.drawable.plus));
 			ListView lv = getListView();
 			lv.setTextFilterEnabled(true);
-
+			
 			lv.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					// When clicked, show a toast with the TextView text
-
-					//String message = "";
-					String serie = ((TextView) view).getText().toString();
-
-					// SeriesUtils.addSerie(SeriesUtils.SERIES, serie,
-					// getApplicationContext());
-					/*
-					 * int ret = SeriesUtils.addSerie(SeriesUtils.OWNSERIES,
-					 * serie, getApplicationContext()); if(ret >= 0) message =
-					 * "Serie " + serie + " a�adida correctamente"; else if(ret
-					 * == -1) message = "No se ha a�adido la serie " + serie
-					 * +", ya existia"; else if(ret == -2) message =
-					 * "No se ha a�adido la serie " + serie
-					 * +", No existe ninguna serie con ese nombre";
-					 * showDialog(message);
-					 * //Toast.makeText(getApplicationContext(), ((TextView)
-					 * view).getText(),Toast.LENGTH_SHORT).show();
-					 */
-					showConfirmDialog(serie);
+					// Navegamos					
 				}
 			});
+			
+			lv.setOnItemLongClickListener(new OnItemLongClickListener() {
+	        	public boolean onItemLongClick(AdapterView<?> parent, View view,
+		  	              int position, long id) {
+	        			showOptionsDialog((((TextView)((RelativeLayout) view).getChildAt(0)).getText()));
+		        		//createNotification(((TextView) view).getText());
+		        		return true;
+		        	}
+	        });
 		}
 	}
 
@@ -114,6 +115,40 @@ public class NewSearch extends ListActivity {
 						});
 		AlertDialog alert = dialog.create();
 		alert.show();
+	}
+	
+	public void showOptionsDialog(CharSequence serie){
+		CharSequence[] options = {getString(R.string.add), getString(R.string.open)};
+    	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+    	dialog.setItems(options, new CommandLongClick(serie));
+    	AlertDialog alert = dialog.create();
+    	alert.show();
+    }
+	
+	public class CommandLongClick implements DialogInterface.OnClickListener {
+		
+		  private CharSequence serie;
+		
+		  public CommandLongClick(CharSequence serie) {
+		
+		    this.serie = serie;
+		
+		  }
+		  
+		  public void onClick(DialogInterface dialog, int which) {
+			dialog.dismiss();
+			switch (which) {
+			case 0:
+				addSerie(serie);
+				break;
+			case 1:
+				//showConfirmDialog(serie);
+				break;
+			default:
+				break;
+			}
+					
+		  }
 	}
 	
 
@@ -161,5 +196,63 @@ public class NewSearch extends ListActivity {
 					}
 				});
 		dialog.show();
+	}
+	
+	public class IconListViewAdapterAdd extends ArrayAdapter<String>{
+		
+		private List<String> items;
+	    private int icon;
+	    private Context context;
+	    
+	    public IconListViewAdapterAdd(Context context, int textViewResourceId, List<String> items, int icon) {
+	            super(context, textViewResourceId, items);
+	            this.items = items;
+	            this.icon = icon;
+	            this.context = context;
+	    }
+	    @Override
+	    public View getView(int position, View convertView, ViewGroup parent) {
+	        View v = convertView;
+	        if (v == null) {
+	            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	            v = vi.inflate(R.layout.list_item_icon, null);
+	        }
+	        String text = items.get(position);
+	        	
+	        //poblamos la lista de elementos
+	        	
+	        TextView tt = (TextView) v.findViewById(R.id.listText);
+	        ImageView im = (ImageView) v.findViewById(R.id.listIcon);
+	        
+	        im.setOnClickListener(addSerie);
+	        
+	        if (im!= null) {
+	        	im.setImageResource(this.icon);
+	        }                        
+	        if (tt != null) {             
+	            tt.setText(text);                             
+	        }    	                    	                        
+	        
+	        return v;
+	   }
+		
+					
+		public OnClickListener addSerie = new OnClickListener() {
+			public void onClick(View v) {
+				// do something when the button is clicked
+				v.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						//String message = "";
+						String serie = ((TextView)((RelativeLayout) v.getParent()).getChildAt(0)).getText().toString();
+
+						showConfirmDialog(serie);
+						
+					}
+				});
+				//System.out.println("Salto: " +  ((TextView)((RelativeLayout)v.getParent()).getChildAt(0)).getText());
+
+			}
+		};
+	
 	}
 }
