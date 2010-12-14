@@ -23,9 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/entry_new"
-        android:layout_centerHorizontal="true"
-        android:width="100dip"
-        android:text="Añadir" />
+        style="@style/Button"
+        android:text="@string/add" />
     
 </RelativeLayout>
 
