@@ -8,12 +8,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 
 public class SearchSeries extends Activity {
 	
@@ -29,7 +31,9 @@ public class SearchSeries extends Activity {
 //        button.setOnClickListener(setNewSerie);
         
         Button buttonSearch = (Button)findViewById(R.id.ok);
+        AutoCompleteTextView textView = (AutoCompleteTextView)findViewById(R.id.autocomplete_serie);
         buttonSearch.setOnClickListener(searchSerie);
+        textView.setOnKeyListener(searchSerieEnter);
     }
 	
 	@Override
@@ -44,8 +48,8 @@ public class SearchSeries extends Activity {
 	 */
 	public void populateAutocompleteSerie()
 	{
-		AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_serie);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, SeriesUtils.getListSeries(getApplicationContext()));
+		AutoCompleteTextView textView = (AutoCompleteTextView)findViewById(R.id.autocomplete_serie);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, SeriesUtils.getListSeries(getApplicationContext()));
         textView.setAdapter(adapter);
 	}
 	
@@ -71,6 +75,32 @@ public class SearchSeries extends Activity {
 	    	//dialog.dismiss();
 		}
 	};
+	
+	public OnKeyListener searchSerieEnter = new OnKeyListener() {
+		public boolean onKey(View v, int keyCode, KeyEvent event) {
+    		if (event.getAction() == KeyEvent.ACTION_DOWN)
+    		{
+    			if (keyCode == KeyEvent.KEYCODE_ENTER)
+    			{
+    				EditText edittext = (EditText)findViewById(R.id.autocomplete_serie);
+    				//ProgressDialog dialog = ProgressDialog.show(getApplicationContext(), "", "Buscando...");
+    		    	String serie = edittext.getText().toString();
+    				Intent intent = new Intent().setClass(getApplicationContext(), NewSearch.class);
+    				// Se crea el par�metro a pasar y se a�ade al intent
+    				Bundle b = new Bundle();
+    				b.putCharSequence("q", serie);
+    				intent.putExtras(b);
+    				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    				// Se inicia la nueva actividad con el intent
+    		    	getApplicationContext().startActivity(intent);
+    		    	return true;
+    			}
+    		}
+    		return false;
+		}
+	};
+	
+	
 	
 //	public OnClickListener setNewSerie = new OnClickListener() {
 //	    public void onClick(View v) {

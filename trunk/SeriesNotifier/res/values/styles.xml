@@ -20,6 +20,11 @@
 		<item name="android:width">100dip</item>		
 	</style>	
 	
+	<style name="ListIcon">
+		<item name="android:layout_alignParentRight">true</item>
+		<item name="android:layout_marginTop">12dp</item>
+		<item name="android:layout_marginRight">5dp</item>
+	</style>
 	<style name="Tabs">
 		<item name="android:padding">5dp</item>		
 	</style>

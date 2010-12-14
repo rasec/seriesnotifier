@@ -12,14 +12,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.projects.adapters.*;
 import com.projects.utils.*;
 
 public class OwnSeries extends ListActivity {
@@ -40,9 +46,10 @@ public class OwnSeries extends ListActivity {
     
     public void getSeries() {
     	//String[] series = SeriesUtils.getOwnSeries(getApplicationContext());
-    	String[] series = SeriesUtils.getDBSeries(getApplicationContext());
+    	List<String> series = SeriesUtils.getDBSeries(getApplicationContext());
         if(series != null){
-        	setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, series));
+        	setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, series, R.drawable.minus));
+        	
         
 	        ListView lv = getListView();
 	        lv.setTextFilterEnabled(true);
@@ -50,17 +57,15 @@ public class OwnSeries extends ListActivity {
 	        lv.setOnItemClickListener(new OnItemClickListener() {
 	          public void onItemClick(AdapterView<?> parent, View view,
 	              int position, long id) {
-	            // When clicked, show a toast with the TextView text
-	        	  //createNotification(((TextView) view).getText());
-	            //deleteElement(((TextView) view).getText());
-	            showConfirmDialog(((TextView) view).getText());
+		            // Navegar a la página de info de la serie
+		            //showConfirmDialog(((TextView)((RelativeLayout) view).getChildAt(0)).getText());
 	            }
 	        });
 	        
 	        lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	        	public boolean onItemLongClick(AdapterView<?> parent, View view,
 		  	              int position, long id) {
-	        			showOptionsDialog(((TextView) view).getText());
+	        			showOptionsDialog((((TextView)((RelativeLayout) view).getChildAt(0)).getText()));
 		        		//createNotification(((TextView) view).getText());
 		        		return true;
 		        	}
@@ -99,12 +104,12 @@ public class OwnSeries extends ListActivity {
 		//int ret = SeriesUtils.deleteSerie(SeriesUtils.OWNSERIES, text.toString(), this);
 		int ret = (int)SeriesUtils.deleteDBSerie(serie, getApplicationContext());
 		//String[] series = SeriesUtils.getOwnSeries(getApplicationContext());
-		String[] series = SeriesUtils.getDBSeries(getApplicationContext());
+		List<String> series = SeriesUtils.getDBSeries(getApplicationContext());
 		if(series != null){
-			setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, series));
+			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, series, R.drawable.minus));
 		}else{
 			List<String> empty = new ArrayList<String>();
-			setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, empty));
+			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, empty, R.drawable.minus));
 		}
 		if(ret >= 0)
 	 		message = getString(R.string.delSerie) + serie;
@@ -190,4 +195,61 @@ public class OwnSeries extends ListActivity {
 		  }
 	}
 	
+public class IconListViewAdapterDelete extends ArrayAdapter<String>{
+		
+		private List<String> items;
+	    private int icon;
+	    private Context context;
+	    
+	    public IconListViewAdapterDelete(Context context, int textViewResourceId, List<String> items, int icon) {
+	            super(context, textViewResourceId, items);
+	            this.items = items;
+	            this.icon = icon;
+	            this.context = context;
+	    }
+	    @Override
+	    public View getView(int position, View convertView, ViewGroup parent) {
+	        View v = convertView;
+	        if (v == null) {
+	            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	            v = vi.inflate(R.layout.list_item_icon, null);
+	        }
+	        String text = items.get(position);
+	        	
+	        //poblamos la lista de elementos
+	        	
+	        TextView tt = (TextView) v.findViewById(R.id.listText);
+	        ImageView im = (ImageView) v.findViewById(R.id.listIcon);
+	        
+	        im.setOnClickListener(deleteSerie);
+	        
+	        if (im!= null) {
+	        	im.setImageResource(this.icon);
+	        }                        
+	        if (tt != null) {             
+	            tt.setText(text);                             
+	        }    	                    	                        
+	        
+	        return v;
+	   }
+		
+					
+		public OnClickListener deleteSerie = new OnClickListener() {
+			public void onClick(View v) {
+				// do something when the button is clicked
+				v.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						//String message = "";
+						String serie = ((TextView)((RelativeLayout) v.getParent()).getChildAt(0)).getText().toString();
+
+						showConfirmDialog(serie);
+						
+					}
+				});
+				//System.out.println("Salto: " +  ((TextView)((RelativeLayout)v.getParent()).getChildAt(0)).getText());
+
+			}
+		};
+	
+	}
 }
