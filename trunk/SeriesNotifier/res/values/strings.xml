@@ -7,19 +7,18 @@
     
     <string name="search">Buscar</string>
     <string name="my_series">Mis Series</string>
-    
-    
+
     <string name="hello">Hello World, Notifier!</string>
     <string name="head"> Series Notifier </string>
     <string name="body"> Series Notifier es un notificador de series para android </string>
-        
     
 	<string name="new_search">SeriesNotifier - Resultados de la busqueda</string>
     <string name="newserie">SeriesNotifier - Nueva Serie</string>
     <string name="new_episode">SeriesNotifier - Nuevo episodio</string>
     
-    <string name="getSeries">http://www.thetvdb.com/api/GetSeries.php</string>
-    <string name="getSeriesParam">seriesname</string>
+    <string name="getSeries">http://services.tvrage.com/feeds/search.php</string>
+    <string name="getSeriesParam">show</string>
+    <string name="apiKey">MksMRmmlqSXKePy5vHP8</string>
     
     <string name="newEpisdeProv">Existe una nueva serie apunto de ser emitida de la lista de series elegida</string>
     <string name="optionsProv">Aquí irán las propiedades u opciones de la aplicación</string>
@@ -40,7 +39,6 @@
     <string name="delSerieNotExists">No se ha eliminado (no existia): </string>
     <string name="askToDelete">¿Desea eliminar de su lista de series: </string>
     
-    
     <string name="notify">Notificar</string>
     <string name="delete">Eliminar</string>
     <string name="add">Añadir</string>
@@ -51,9 +49,6 @@
     <string name="textInputSerieSearch">Escriba el nombre de una serie para buscar:</string>
     <string name="textInputSerieAdd">Escriba el nombre de una serie para añadir:</string>
     <string name="emptySerieSearch">No se han encontrado coincidencias, prueba a añadirla a la lista de series:</string>
-     
-    
-    
-    
+        
 </resources>
 

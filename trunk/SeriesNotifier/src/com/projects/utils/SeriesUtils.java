@@ -25,6 +25,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.projects.database.DBAdapter;
+import com.projects.series.Serie;
 import com.projects.seriesnotifier.R;
 
 import android.content.Context;
@@ -284,8 +285,8 @@ public class SeriesUtils {
 		return exists;
 	}
 
-	public static List<String> getSeriesByQuery(Context applicationContext,	String query) {
-		List<String> list = null;
+	public static List<Serie> getSeriesByQuery(Context applicationContext,	String query) {
+		List<Serie> list = null;
 		//String[] list = new String[100];
 		/*String names;
 		FileInputStream fis;
@@ -306,7 +307,7 @@ public class SeriesUtils {
 				e.printStackTrace();
 			}
 		}*/
-		list = Arrays.asList(getSeriesTvDB(query, applicationContext).split(","));
+		list = getSeriesTvDBList(query, applicationContext);
 		
 		return list;
 	}
@@ -387,7 +388,7 @@ public class SeriesUtils {
 	}
 	
 	
-	/* METODOS PARA EL ACCESO ATHETVDB */
+	/* METODOS PARA EL ACCESO A THETVDB */
 	public static String getSeriesTvDB(String name, Context context)
 	{
 		URL url;
@@ -406,20 +407,85 @@ public class SeriesUtils {
 				DocumentBuilderFactory dbf;
 				dbf = DocumentBuilderFactory.newInstance();
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				// Parse the earthquake feed.
+				// 
 				Document dom = db.parse(in);
 				Element docEle = dom.getDocumentElement();
-				// Get a list of each earthquake entry.
-				NodeList nl = docEle.getElementsByTagName("Series");
+				// 
+				NodeList nl = docEle.getElementsByTagName("show");
 				if (nl != null && nl.getLength() > 0) {
 					for (int i = 0 ; i < nl.getLength(); i++) {
 						Element entry = (Element)nl.item(i);
 						Element SerieName =
-						   (Element)entry.getElementsByTagName("SeriesName").item(0);
-						if(i==0){
-							ret += SerieName.getFirstChild().getNodeValue();;
-						}else{
-							ret += "," + SerieName.getFirstChild().getNodeValue();
+						   (Element)entry.getElementsByTagName("name").item(0);
+						String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
+						if(ended.equals("0")){
+							if(i==0){
+								ret += SerieName.getFirstChild().getNodeValue();
+							}else{
+								ret += "," + SerieName.getFirstChild().getNodeValue();
+							}
+						}
+						
+					}
+				}								
+				
+			}
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
+	
+	public static List<Serie> getSeriesTvDBList(String name, Context context)
+	{
+		URL url;
+		List<Serie> ret = new ArrayList<Serie>();
+		Serie serie;
+		String site = context.getString(R.string.getSeries);
+		String paramName = context.getString(R.string.getSeriesParam);
+		try {
+			url = new URL(site+"?"+paramName+"="+URLEncoder.encode(name));
+			URLConnection connection;
+			connection = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection)connection;
+			int responseCode = httpConnection.getResponseCode();
+			if(responseCode == HttpURLConnection.HTTP_OK){
+				//ret += "Peticion Correcta";
+				InputStream in = httpConnection.getInputStream();
+				DocumentBuilderFactory dbf;
+				dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				// 
+				Document dom = db.parse(in);
+				Element docEle = dom.getDocumentElement();
+				// 
+				NodeList nl = docEle.getElementsByTagName("show");
+				if (nl != null && nl.getLength() > 0) {
+					for (int i = 0 ; i < nl.getLength(); i++) {
+						Element entry = (Element)nl.item(i);
+						Element SerieName =
+						   (Element)entry.getElementsByTagName("name").item(0);
+						Element SerieId =
+							   (Element)entry.getElementsByTagName("showid").item(0);
+						String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
+						if(ended.equals("0")){
+							serie = new Serie();
+							serie.setName(SerieName.getFirstChild().getNodeValue());
+							serie.setId(SerieId.getFirstChild().getNodeValue());
+							ret.add(serie);
 						}
 						
 					}
@@ -446,3 +512,4 @@ public class SeriesUtils {
 	}
 	
 }
+

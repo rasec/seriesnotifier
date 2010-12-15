@@ -1,9 +1,11 @@
 package com.projects.seriesnotifier;
 
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
 import com.projects.adapters.IconListViewAdapter;
+import com.projects.series.Serie;
 import com.projects.seriesnotifier.OwnSeries.CommandLongClick;
 import com.projects.utils.SeriesUtils;
 
@@ -64,19 +66,24 @@ public class NewSearch extends ListActivity {
 	}
 
 	public void getSeries(String query) {
-		List<String> series = SeriesUtils.getSeriesByQuery(getApplicationContext(),
+		List<Serie> series = SeriesUtils.getSeriesByQuery(getApplicationContext(),
 				query);
+		List<String> seriesString = new ArrayList<String>();
+		for (Serie serie : series) {
+			seriesString.add(serie.getName());			
+		}
 		if (!series.isEmpty()) {
-			setListAdapter(new IconListViewAdapterAdd(this, R.layout.list_item_icon, series, R.drawable.plus));
+			setListAdapter(new IconListViewAdapterAdd(this, R.layout.list_item_icon, seriesString, series, R.drawable.plus));
 			ListView lv = getListView();
 			lv.setTextFilterEnabled(true);
 			
-			lv.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					// Navegamos					
-				}
-			});
+//			lv.setOnItemClickListener(new OnItemClickListener() {
+//				public void onItemClick(AdapterView<?> parent, View view,
+//						int position, long id) {
+//					// Navegamos		
+//					
+//				}
+//			});
 			
 			lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	        	public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -200,12 +207,12 @@ public class NewSearch extends ListActivity {
 	
 	public class IconListViewAdapterAdd extends ArrayAdapter<String>{
 		
-		private List<String> items;
+		private List<Serie> items;
 	    private int icon;
 	    private Context context;
 	    
-	    public IconListViewAdapterAdd(Context context, int textViewResourceId, List<String> items, int icon) {
-	            super(context, textViewResourceId, items);
+	    public IconListViewAdapterAdd(Context context, int textViewResourceId, List<String> itemsString, List<Serie> items, int icon) {
+	    		super(context, textViewResourceId, itemsString);
 	            this.items = items;
 	            this.icon = icon;
 	            this.context = context;
@@ -217,7 +224,7 @@ public class NewSearch extends ListActivity {
 	            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	            v = vi.inflate(R.layout.list_item_icon, null);
 	        }
-	        String text = items.get(position);
+	        String text = items.get(position).getName();
 	        	
 	        //poblamos la lista de elementos
 	        	
@@ -240,19 +247,13 @@ public class NewSearch extends ListActivity {
 		public OnClickListener addSerie = new OnClickListener() {
 			public void onClick(View v) {
 				// do something when the button is clicked
-				v.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-						//String message = "";
-						String serie = ((TextView)((RelativeLayout) v.getParent()).getChildAt(0)).getText().toString();
+				
+				//String message = "";
+				String serie = ((TextView)((RelativeLayout) v.getParent()).getChildAt(0)).getText().toString();
 
-						showConfirmDialog(serie);
+				showConfirmDialog(serie);
 						
-					}
-				});
-				//System.out.println("Salto: " +  ((TextView)((RelativeLayout)v.getParent()).getChildAt(0)).getText());
-
 			}
 		};
-	
 	}
 }
