@@ -411,20 +411,20 @@ public class SeriesUtils {
 				Document dom = db.parse(in);
 				Element docEle = dom.getDocumentElement();
 				// 
-				NodeList nl = docEle.getElementsByTagName("show");
+				NodeList nl = docEle.getElementsByTagName("Series");
 				if (nl != null && nl.getLength() > 0) {
 					for (int i = 0 ; i < nl.getLength(); i++) {
 						Element entry = (Element)nl.item(i);
 						Element SerieName =
-						   (Element)entry.getElementsByTagName("name").item(0);
-						String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
-						if(ended.equals("0")){
+						   (Element)entry.getElementsByTagName("SeriesName").item(0);
+						//String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
+						//if(ended.equals("0")){
 							if(i==0){
 								ret += SerieName.getFirstChild().getNodeValue();
 							}else{
 								ret += "," + SerieName.getFirstChild().getNodeValue();
 							}
-						}
+						//}
 						
 					}
 				}								
@@ -472,21 +472,21 @@ public class SeriesUtils {
 				Document dom = db.parse(in);
 				Element docEle = dom.getDocumentElement();
 				// 
-				NodeList nl = docEle.getElementsByTagName("show");
+				NodeList nl = docEle.getElementsByTagName("Series");
 				if (nl != null && nl.getLength() > 0) {
 					for (int i = 0 ; i < nl.getLength(); i++) {
 						Element entry = (Element)nl.item(i);
 						Element SerieName =
-						   (Element)entry.getElementsByTagName("name").item(0);
+						   (Element)entry.getElementsByTagName("SeriesName").item(0);
 						Element SerieId =
-							   (Element)entry.getElementsByTagName("showid").item(0);
-						String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
-						if(ended.equals("0")){
+							   (Element)entry.getElementsByTagName("id").item(0);
+						//String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
+						//if(ended.equals("0")){
 							serie = new Serie();
 							serie.setName(SerieName.getFirstChild().getNodeValue());
 							serie.setId(SerieId.getFirstChild().getNodeValue());
 							ret.add(serie);
-						}
+						//}
 						
 					}
 				}								
