@@ -237,17 +237,8 @@ public class IconListViewAdapterDelete extends ArrayAdapter<String>{
 		public OnClickListener deleteSerie = new OnClickListener() {
 			public void onClick(View v) {
 				// do something when the button is clicked
-				v.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-						//String message = "";
-						String serie = ((TextView)((RelativeLayout) v.getParent()).getChildAt(0)).getText().toString();
-
-						showConfirmDialog(serie);
-						
-					}
-				});
-				//System.out.println("Salto: " +  ((TextView)((RelativeLayout)v.getParent()).getChildAt(0)).getText());
-
+				String serie = ((TextView)((RelativeLayout) v.getParent()).getChildAt(0)).getText().toString();
+				showConfirmDialog(serie);
 			}
 		};
 	
