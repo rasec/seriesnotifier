@@ -14,6 +14,20 @@
 		<item name="android:layout_marginTop">10dip</item>
 	</style>
 	
+	<style name="TextDesc">
+		<item name="android:layout_marginBottom">10dip</item>
+	</style>
+	<style name="DescTitle">
+		<item name="android:layout_marginTop">10dip</item>
+	</style>
+	
+	
+	<style name="Title">
+		<item name="android:layout_marginTop">10dip</item>
+		<item name="android:layout_marginBottom">10dip</item>
+		<item name="android:textSize">18sp</item>
+	</style>
+	
 	<style name="ButtonMargin">
 		<item name="android:layout_centerHorizontal">true</item>
 		<item name="android:layout_marginTop">5dip</item>

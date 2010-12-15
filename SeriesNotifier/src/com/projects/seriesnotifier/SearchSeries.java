@@ -64,12 +64,12 @@ public class SearchSeries extends Activity {
 			EditText edittext = (EditText)findViewById(R.id.autocomplete_serie);
 			//ProgressDialog dialog = ProgressDialog.show(getApplicationContext(), "", "Buscando...");
 	    	String serie = edittext.getText().toString();
-			//Intent intent = new Intent().setClass(getApplicationContext(), NewSearch.class);
-	    	Intent intent = new Intent().setClass(getApplicationContext(), SerieInfo.class);
+			Intent intent = new Intent().setClass(getApplicationContext(), NewSearch.class);
+	    	
 			// Se crea el par�metro a pasar y se a�ade al intent
-			//Bundle b = new Bundle();
-			//b.putCharSequence("q", serie);
-			//intent.putExtras(b);
+			Bundle b = new Bundle();
+			b.putCharSequence("q", serie);
+			intent.putExtras(b);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			// Se inicia la nueva actividad con el intent
 	    	getApplicationContext().startActivity(intent);
