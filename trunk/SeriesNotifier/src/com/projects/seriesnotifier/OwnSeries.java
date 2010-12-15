@@ -43,7 +43,11 @@ public class OwnSeries extends ListActivity {
 		getSeries();
     }
 	
-    
+    public void startActivity(){
+    	Intent intent = new Intent().setClass(getApplicationContext(), SerieInfo.class);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    	getApplicationContext().startActivity(intent);    
+    }
     public void getSeries() {
     	//String[] series = SeriesUtils.getOwnSeries(getApplicationContext());
     	List<String> series = SeriesUtils.getDBSeries(getApplicationContext());
@@ -59,6 +63,8 @@ public class OwnSeries extends ListActivity {
 	              int position, long id) {
 		            // Navegar a la página de info de la serie
 		            //showConfirmDialog(((TextView)((RelativeLayout) view).getChildAt(0)).getText());
+	        	  startActivity();
+	        	 
 	            }
 	        });
 	        

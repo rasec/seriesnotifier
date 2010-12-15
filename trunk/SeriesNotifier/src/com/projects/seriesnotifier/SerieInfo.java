@@ -1,9 +1,14 @@
 package com.projects.seriesnotifier;
 
+import java.io.InputStream;
+import java.net.URL;
+
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 public class SerieInfo extends Activity {
 
@@ -12,6 +17,12 @@ public class SerieInfo extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.serie_info);
+		
+		ImageView img = (ImageView)findViewById(R.id.banner);
+		Drawable drawable = LoadImageFromWebOperations("http://www.thetvdb.com/banners/_cache/graphical/79349-g7.jpg");
+
+        img.setImageDrawable(drawable);
+
 		
 		// Se obtiene el par�metro pasado
 		//Bundle b = getIntent().getExtras();
@@ -23,4 +34,18 @@ public class SerieInfo extends Activity {
 		// listener cuando se pulsa el bot�n a�adir
 		
 	}
+	
+	private Drawable LoadImageFromWebOperations(String url)
+	{
+	       try
+	       {
+	           InputStream is = (InputStream) new URL(url).getContent();
+	           Drawable d = Drawable.createFromStream(is, "src name");
+	           return d;
+	        }catch (Exception e) {
+	            System.out.println("Exc="+e);
+	            return null;
+	        }
+	}
+
 }
