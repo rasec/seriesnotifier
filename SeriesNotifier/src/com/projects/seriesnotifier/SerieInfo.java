@@ -19,7 +19,7 @@ public class SerieInfo extends Activity {
 		setContentView(R.layout.serie_info);
 		
 		ImageView img = (ImageView)findViewById(R.id.banner);
-		Drawable drawable = LoadImageFromWebOperations("http://www.thetvdb.com/banners/_cache/graphical/79349-g7.jpg");
+		Drawable drawable = LoadImageFromWebOperations("http://www.androidpeople.com/wp-content/uploads/2010/03/android.png");
 
         img.setImageDrawable(drawable);
 

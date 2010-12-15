@@ -16,9 +16,13 @@
     <string name="newserie">SeriesNotifier - Nueva Serie</string>
     <string name="new_episode">SeriesNotifier - Nuevo episodio</string>
     
-    <string name="getSeries">http://services.tvrage.com/feeds/search.php</string>
-    <string name="getSeriesParam">show</string>
-    <string name="apiKey">MksMRmmlqSXKePy5vHP8</string>
+    <string name="getSeries">http://www.thetvdb.com/api/GetSeries.php</string>
+    <string name="getSeriesParam">seriesname</string>
+    <string name="apiKey">121E6F2A75E6F1FC</string>
+    
+    <string name="getSeriesTvRange">http://services.tvrage.com/feeds/search.php</string>
+    <string name="getSeriesParamTvRange">show</string>
+    <string name="apiKeyTvRange">MksMRmmlqSXKePy5vHP8</string>
     
     <string name="newEpisdeProv">Existe una nueva serie apunto de ser emitida de la lista de series elegida</string>
     <string name="optionsProv">Aquí irán las propiedades u opciones de la aplicación</string>
