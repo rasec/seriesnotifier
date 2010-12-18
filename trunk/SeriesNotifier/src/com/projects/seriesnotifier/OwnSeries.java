@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.projects.adapters.*;
+import com.projects.series.Serie;
 import com.projects.utils.*;
 
 public class OwnSeries extends ListActivity {
@@ -43,16 +44,24 @@ public class OwnSeries extends ListActivity {
 		getSeries();
     }
 	
-    public void startActivity(){
+    public void startActivity(int id){
     	Intent intent = new Intent().setClass(getApplicationContext(), SerieInfo.class);
+    	Bundle b = new Bundle();
+		b.putInt("id", id);
+		b.putInt("type", 0);
+		intent.putExtras(b);
     	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     	getApplicationContext().startActivity(intent);    
     }
     public void getSeries() {
     	//String[] series = SeriesUtils.getOwnSeries(getApplicationContext());
-    	List<String> series = SeriesUtils.getDBSeries(getApplicationContext());
+    	List<Serie> series = SeriesUtils.getDBSeries(getApplicationContext());
+    	List<String> seriesString = new ArrayList<String>();
+		for (Serie serie : series) {
+			seriesString.add(serie.getName());			
+		}
         if(series != null){
-        	setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, series, R.drawable.minus));
+        	setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon,seriesString, series, R.drawable.minus));
         	
         
 	        ListView lv = getListView();
@@ -63,7 +72,8 @@ public class OwnSeries extends ListActivity {
 	              int position, long id) {
 		            // Navegar a la página de info de la serie
 		            //showConfirmDialog(((TextView)((RelativeLayout) view).getChildAt(0)).getText());
-	        	  startActivity();
+	        	  
+	        	  startActivity( Integer.parseInt(((String)(((TextView)((RelativeLayout) view).getChildAt(0))).getTag()) ));
 	        	 
 	            }
 	        });
@@ -110,12 +120,17 @@ public class OwnSeries extends ListActivity {
 		//int ret = SeriesUtils.deleteSerie(SeriesUtils.OWNSERIES, text.toString(), this);
 		int ret = (int)SeriesUtils.deleteDBSerie(serie, getApplicationContext());
 		//String[] series = SeriesUtils.getOwnSeries(getApplicationContext());
-		List<String> series = SeriesUtils.getDBSeries(getApplicationContext());
+		List<Serie> series = SeriesUtils.getDBSeries(getApplicationContext());
+		List<String> seriesString = new ArrayList<String>();
+		for (Serie s : series) {
+			seriesString.add(s.getName());			
+		}
+
 		if(series != null){
-			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, series, R.drawable.minus));
+			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, seriesString, series, R.drawable.minus));
 		}else{
 			List<String> empty = new ArrayList<String>();
-			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, empty, R.drawable.minus));
+			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, empty, series, R.drawable.minus));
 		}
 		if(ret >= 0)
 	 		message = getString(R.string.delSerie) + serie;
@@ -203,12 +218,12 @@ public class OwnSeries extends ListActivity {
 	
 public class IconListViewAdapterDelete extends ArrayAdapter<String>{
 		
-		private List<String> items;
+	private List<Serie> items;
 	    private int icon;
 	    private Context context;
 	    
-	    public IconListViewAdapterDelete(Context context, int textViewResourceId, List<String> items, int icon) {
-	            super(context, textViewResourceId, items);
+	    public IconListViewAdapterDelete(Context context, int textViewResourceId, List<String> itemsString, List<Serie> items, int icon) {
+	            super(context, textViewResourceId, itemsString);
 	            this.items = items;
 	            this.icon = icon;
 	            this.context = context;
@@ -220,7 +235,8 @@ public class IconListViewAdapterDelete extends ArrayAdapter<String>{
 	            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	            v = vi.inflate(R.layout.list_item_icon, null);
 	        }
-	        String text = items.get(position);
+	        String text = items.get(position).getName();
+	        String id = items.get(position).getId();
 	        	
 	        //poblamos la lista de elementos
 	        	
@@ -233,7 +249,8 @@ public class IconListViewAdapterDelete extends ArrayAdapter<String>{
 	        	im.setImageResource(this.icon);
 	        }                        
 	        if (tt != null) {             
-	            tt.setText(text);                             
+	            tt.setText(text);        
+	            tt.setTag(id);
 	        }    	                    	                        
 	        
 	        return v;

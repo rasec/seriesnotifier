@@ -77,18 +77,19 @@ public class NewSearch extends ListActivity {
 			ListView lv = getListView();
 			lv.setTextFilterEnabled(true);
 			
-//			lv.setOnItemClickListener(new OnItemClickListener() {
-//				public void onItemClick(AdapterView<?> parent, View view,
-//						int position, long id) {
-//					// Navegamos		
-//					
-//				}
-//			});
+			lv.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// Navegamos		
+					startActivity( Integer.parseInt((String) (((TextView)((RelativeLayout) view).getChildAt(0)).getTag())) );
+				}
+			});
 			
 			lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 	        	public boolean onItemLongClick(AdapterView<?> parent, View view,
 		  	              int position, long id) {
-	        			showOptionsDialog((((TextView)((RelativeLayout) view).getChildAt(0)).getText()));
+	        			showOptionsDialog((((TextView)((RelativeLayout) view).getChildAt(0)).getText()),
+	        					Integer.parseInt((String) (((TextView)((RelativeLayout) view).getChildAt(0)).getTag())));
 		        		//createNotification(((TextView) view).getText());
 		        		return true;
 		        	}
@@ -96,10 +97,10 @@ public class NewSearch extends ListActivity {
 		}
 	}
 
-	public void addSerie(CharSequence serie) {
+	public void addSerie(CharSequence serie, int id) {
 		String toRet = "";
 		//int ret = SeriesUtils.addSerie(SeriesUtils.OWNSERIES, serie.toString(), getApplicationContext());
-		int ret = (int) SeriesUtils.addDBSerie(serie.toString(), getApplicationContext());
+		int ret = (int) SeriesUtils.addDBSerie(serie.toString(), id, getApplicationContext());
 		if (ret >= 0)
 			toRet = getString(R.string.addSuccess) + serie;
 		else if (ret == -1)
@@ -109,11 +110,11 @@ public class NewSearch extends ListActivity {
 		showDialog(toRet);
 	}
 
-	public void showConfirmDialog(String serie) {
+	public void showConfirmDialog(String serie, int id) {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 		dialog.setMessage(
 				getString(R.string.askToAddSerie) + serie)
-				.setPositiveButton(getString(R.string.Ok), new CommandAddSerie(serie))
+				.setPositiveButton(getString(R.string.Ok), new CommandAddSerie(serie, id))
 				.setNegativeButton(getString(R.string.cancel),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
@@ -124,10 +125,10 @@ public class NewSearch extends ListActivity {
 		alert.show();
 	}
 	
-	public void showOptionsDialog(CharSequence serie){
+	public void showOptionsDialog(CharSequence serie, int id){
 		CharSequence[] options = {getString(R.string.add), getString(R.string.open)};
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-    	dialog.setItems(options, new CommandLongClick(serie));
+    	dialog.setItems(options, new CommandLongClick(serie, id));
     	AlertDialog alert = dialog.create();
     	alert.show();
     }
@@ -135,10 +136,12 @@ public class NewSearch extends ListActivity {
 	public class CommandLongClick implements DialogInterface.OnClickListener {
 		
 		  private CharSequence serie;
+		  private int id;
 		
-		  public CommandLongClick(CharSequence serie) {
+		  public CommandLongClick(CharSequence serie, int id) {
 		
 		    this.serie = serie;
+		    this.id = id;
 		
 		  }
 		  
@@ -146,10 +149,10 @@ public class NewSearch extends ListActivity {
 			dialog.dismiss();
 			switch (which) {
 			case 0:
-				addSerie(serie);
+				addSerie(serie, id);
 				break;
 			case 1:
-				//showConfirmDialog(serie);
+				startActivity(id);
 				break;
 			default:
 				break;
@@ -162,14 +165,16 @@ public class NewSearch extends ListActivity {
 	/* Inner class para el control de acciones en el dialog */
 	public class CommandAddSerie implements DialogInterface.OnClickListener {
 		private CharSequence serie;
+		private int id;
 
-		public CommandAddSerie(CharSequence serie) {
+		public CommandAddSerie(CharSequence serie, int id) {
 			this.serie = serie;
+			this.id = id;
 		}
 
 		public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
-			addSerie(serie);
+			addSerie(serie, id);
 		}
 	}
 	
@@ -205,6 +210,16 @@ public class NewSearch extends ListActivity {
 		dialog.show();
 	}
 	
+	public void startActivity(int id){
+    	Intent intent = new Intent().setClass(getApplicationContext(), SerieInfo.class);
+    	Bundle b = new Bundle();
+		b.putInt("id", id);
+		b.putInt("type", 1);
+		intent.putExtras(b);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    	getApplicationContext().startActivity(intent);    
+    }
+	
 	public class IconListViewAdapterAdd extends ArrayAdapter<String>{
 		
 		private List<Serie> items;
@@ -225,6 +240,7 @@ public class NewSearch extends ListActivity {
 	            v = vi.inflate(R.layout.list_item_icon, null);
 	        }
 	        String text = items.get(position).getName();
+	        String id = items.get(position).getId();
 	        	
 	        //poblamos la lista de elementos
 	        	
@@ -237,7 +253,8 @@ public class NewSearch extends ListActivity {
 	        	im.setImageResource(this.icon);
 	        }                        
 	        if (tt != null) {             
-	            tt.setText(text);                             
+	            tt.setText(text);
+	            tt.setTag(id);
 	        }    	                    	                        
 	        
 	        return v;
@@ -250,8 +267,9 @@ public class NewSearch extends ListActivity {
 				
 				//String message = "";
 				String serie = ((TextView)((RelativeLayout) v.getParent()).getChildAt(0)).getText().toString();
+				int id = Integer.parseInt((String) ((TextView)((RelativeLayout) v.getParent()).getChildAt(0)).getTag());
 
-				showConfirmDialog(serie);
+				showConfirmDialog(serie, id);
 						
 			}
 		};

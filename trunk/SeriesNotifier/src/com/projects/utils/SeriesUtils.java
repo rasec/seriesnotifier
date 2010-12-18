@@ -28,6 +28,7 @@ import com.projects.database.DBAdapter;
 import com.projects.series.Serie;
 import com.projects.seriesnotifier.R;
 
+import android.R.array;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
@@ -65,7 +66,7 @@ public class SeriesUtils {
 	  
 	  }
 	  
-	  public static List<String> getSeries(Context context, String tipo){
+	  public static List<Serie> getSeries(Context context, String tipo){
 		  if(tipo == SERIES){
 			  return getListSeriesList(context);
 			  
@@ -102,16 +103,18 @@ public class SeriesUtils {
 		return list;
 	}
 	  
-	  public static List<String> getListSeriesList(Context context){
-			List<String> list = new ArrayList<String>();
+	  public static List<Serie> getListSeriesList(Context context){
+			List<Serie> list = new ArrayList<Serie>();
+			List<String> listString = new ArrayList<String>();
+			Serie serie = new Serie();
 			String names;
 			FileInputStream fis;
-			list = Arrays.asList(context.fileList());
+			listString = Arrays.asList(context.fileList());
 			if(!list.isEmpty()){
 				try {
 					fis = context.openFileInput(SERIES);
 					names = fileToString(fis);
-					list = Arrays.asList(names.split(","));
+					listString = Arrays.asList(names.split(","));
 					fis.close();
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -120,6 +123,11 @@ public class SeriesUtils {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
+			for (String s : listString) {
+				serie = new Serie();
+				serie.setName(s);
+				list.add(serie);
 			}
 			
 			return list;
@@ -187,12 +195,12 @@ public class SeriesUtils {
 			// No exist�a la serie
 			ret = -1;
 		}else{
-			List<String> list = getSeries(context, file);
+			List<Serie> list = getSeries(context, file);
 			if(!list.isEmpty()){
 				int i = 0,j = 0;
-				List<String> listAux = new ArrayList<String>();
-				for (String item : list) {
-					if(!item.toLowerCase().equals(serie.toLowerCase())){
+				List<Serie> listAux = new ArrayList<Serie>();
+				for (Serie item : list) {
+					if(!item.getName().toLowerCase().equals(serie.toLowerCase())){
 						listAux.add(item);
 						i++;
 					}
@@ -233,10 +241,10 @@ public class SeriesUtils {
 		return ret;
 	}
 	
-	private static String toSimpleString(List<String> listAux) {
-		String ret = listAux.get(0);
+	private static String toSimpleString(List<Serie> listAux) {
+		String ret = listAux.get(0).getName();
 		for (int i = 1; i < listAux.size(); i++) {
-			ret += "," + listAux.get(i);
+			ret += "," + listAux.get(i).getName();
 		}
 		return ret;
 	}
@@ -337,13 +345,13 @@ public class SeriesUtils {
 	
 	/* DataBase Methods */
 		
-	public static List<String> getDBSeries(Context context)
+	public static List<Serie> getDBSeries(Context context)
 	{
 		DBAdapter db = new DBAdapter(context);
-		String[] ret = null;
-		String series = "";
 		int cols = 0;
 		db.open();
+		Serie serie = new Serie();
+		List<Serie> series = new ArrayList<Serie>();
   
 		Cursor cursor = db.getSeries();
 		cursor.moveToFirst();
@@ -352,24 +360,22 @@ public class SeriesUtils {
 			for(int i = 0; i < cursor.getCount(); i++)
 			{
 				cursor.moveToPosition(i);
-				if(i == 0)
-					series += cursor.getString(1);
-				else
-					series += "," + cursor.getString(1);
-				
+				serie = new Serie();
+				serie.setId(cursor.getString(0));
+				serie.setName(cursor.getString(1));
+				series.add(serie);
 			}
-			ret = series.split(",");
 		}
   
 		db.close();
-		return Arrays.asList(ret);		  
+		return series;		  
 	}
 	
-	public static long addDBSerie(String serie, Context context){
+	public static long addDBSerie(String serie, int id, Context context){
 		DBAdapter db = new DBAdapter(context);
 		long ret = 0;
 		db.open();
-		ret =  db.insertSerie(serie);
+		ret =  db.insertSerie(serie, id);
 		db.close();
 		return ret;
 	}
@@ -382,6 +388,19 @@ public class SeriesUtils {
 		
 		// Delete de serie by name
 		db.deleteSerie(serie);
+		
+		db.close();
+		return ret;
+	}
+	
+	public static long deleteDBSerie(int id, Context context)
+	{
+		long ret = 0;
+		DBAdapter db = new DBAdapter(context);
+		db.open();
+		
+		// Delete de serie by name
+		db.deleteSerie(id);
 		
 		db.close();
 		return ret;
@@ -509,6 +528,76 @@ public class SeriesUtils {
 		}
 		
 		return ret;
+	}
+	
+	public static Serie getSeriesInfo(int id, Context context)
+	{
+		URL url;
+		
+		Serie serie = new Serie();
+		String site = context.getString(R.string.infoSerieUrl);
+		String siteEnd = context.getString(R.string.infoSerieUrlEnd);
+		
+		try {
+			url = new URL(site + id + siteEnd);
+			URLConnection connection;
+			connection = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection)connection;
+			int responseCode = httpConnection.getResponseCode();
+			if(responseCode == HttpURLConnection.HTTP_OK){
+				//ret += "Peticion Correcta";
+				InputStream in = httpConnection.getInputStream();
+				DocumentBuilderFactory dbf;
+				dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				// 
+				Document dom = db.parse(in);
+				Element docEle = dom.getDocumentElement();
+				// 
+				NodeList nl = docEle.getElementsByTagName("Series");
+				if (nl != null && nl.getLength() > 0) {
+					for (int i = 0 ; i < nl.getLength(); i++) {
+						Element entry = (Element)nl.item(i);
+						Element SerieName =
+						   (Element)entry.getElementsByTagName("SeriesName").item(0);
+						Element SerieId =
+							   (Element)entry.getElementsByTagName("id").item(0);
+						Element SerieDesc =
+							   (Element)entry.getElementsByTagName("Overview").item(0);
+						Element SerieImgUrl =
+							   (Element)entry.getElementsByTagName("banner").item(0);
+						//String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
+						//if(ended.equals("0")){
+							serie = new Serie();
+							serie.setName(SerieName.getFirstChild().getNodeValue());
+							serie.setId(SerieId.getFirstChild().getNodeValue());
+							if(SerieDesc.getFirstChild()!=null)
+							serie.setDesc(SerieDesc.getFirstChild().getNodeValue());
+							if(SerieImgUrl.getFirstChild()!=null)
+							serie.setImgUrl(SerieImgUrl.getFirstChild().getNodeValue());
+						//}
+						
+					}
+				}								
+				
+			}
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return serie;
 	}
 	
 }
