@@ -44,9 +44,10 @@ public class DBAdapter {
 		DBHelper.close();
 	}
 
-	public long insertSerie(String serie) {
+	public long insertSerie(String serie, int id) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_NAME, serie);
+		initialValues.put(KEY_ID, id);
 		return db.insert(DATABASE_TABLE, null, initialValues);
 	}
 	
@@ -57,6 +58,11 @@ public class DBAdapter {
 	public long deleteSerie(String serie)
 	{
 		return db.delete(DATABASE_TABLE, KEY_NAME+" = '"+serie+"'", null);
+	}
+	
+	public long deleteSerie(int id)
+	{
+		return db.delete(DATABASE_TABLE, KEY_ID+" = '"+id+"'", null);
 	}
 
 	public Cursor getSeries() {

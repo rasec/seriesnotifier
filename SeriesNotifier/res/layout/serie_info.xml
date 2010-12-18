@@ -5,49 +5,42 @@
     
     <ImageView
 		android:id="@+id/banner"
-		android:layout_width="wrap_content"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" 
+		style="@style/SerieInfoBanner"
 		 />
     
     <TextView
         android:id="@+id/title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        style="@style/Title"
-        android:text="Dexter"
+        
         android:layout_below="@id/banner"
+        style="@style/Title"
         />
     
     <ImageView
 		android:id="@+id/icon"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignParentRight="true"
-		style="@style/ListIcon"
+		android:layout_alignTop="@id/title"
+		style="@style/SerieInfoImage"
 		android:src="@drawable/minus" />
     
     <TextView
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Descripcion:"
-        style="@style/DescTitle"
+        android:text="Descripción:"
         android:layout_below="@id/icon"
+        style="@style/DescTitle"
         />
 	<TextView
         android:id="@+id/desc"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Based on Jeff Lindsay's novels Darkly Dreaming Dexter and Dearly Devoted Dexter this crime thriller follows Dexter Morgan. Dexter is a forensic blood spatter expert for the Miami Metro Police Department. Thanks to a code instilled in him by his foster father, Harry, he hunts down people who have escaped justice and makes sure they don't get away with a crime again."
-        android:layout_below="@id/description"/>
-    
-        
-     <TextView
-        android:id="@+id/airdata"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextNormal"
-        android:text="Proximo capítulos: 2010-12-23" 
-        android:layout_below="@id/desc"/>
+        android:layout_height="fill_parent"
+        android:layout_below="@id/description"
+        style="@style/TextDesc"
+        />
           
 </RelativeLayout>

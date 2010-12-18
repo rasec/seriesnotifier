@@ -56,8 +56,13 @@
 	</style>
 	
 	
+	<style name="SerieInfoBanner">
+		<item name="android:layout_marginBottom">5dp</item>
+	</style>
+	
 	<style name="SerieInfoImage">
-		<item name="android:layout_centerHorizontal">true</item>
+		<item name="android:layout_alignParentRight">true</item>
+		<item name="android:layout_marginRight">5dp</item>		
 	</style>
 	
 	<style name="SerieInfoButton">

@@ -19,6 +19,10 @@
     <string name="getSeries">http://www.thetvdb.com/api/GetSeries.php</string>
     <string name="getSeriesParam">seriesname</string>
     <string name="apiKey">121E6F2A75E6F1FC</string>
+    <string name="infoSerieUrl">http://www.thetvdb.com/api/121E6F2A75E6F1FC/series/</string>
+    <string name="infoSerieUrlEnd">/all/es.xml</string>
+    <string name="bannerUrl">http://www.thetvdb.com/banners/_cache/</string>
+    
     
     <string name="getSeriesTvRange">http://services.tvrage.com/feeds/search.php</string>
     <string name="getSeriesParamTvRange">show</string>
