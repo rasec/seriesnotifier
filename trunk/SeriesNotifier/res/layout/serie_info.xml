@@ -42,5 +42,21 @@
         android:layout_below="@id/description"
         style="@style/TextDesc"
         />
+        
+    <TextView
+        android:id="@+id/statTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="Estado:"
+        android:layout_below="@id/desc"
+        style="@style/DescTitle"
+        />
+	<TextView
+        android:id="@+id/stat"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/statTitle"
+        style="@style/TextDesc"
+        />
           
 </RelativeLayout>

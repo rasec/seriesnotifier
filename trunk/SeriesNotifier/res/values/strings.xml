@@ -57,6 +57,10 @@
     <string name="textInputSerieSearch">Escriba el nombre de una serie para buscar:</string>
     <string name="textInputSerieAdd">Escriba el nombre de una serie para añadir:</string>
     <string name="emptySerieSearch">No se han encontrado coincidencias, prueba a añadirla a la lista de series:</string>
+    
+    <string name="Continuing">Continua emitiendose</string>
+    <string name="Ended">Finalizada</string>
+    
         
 </resources>
 
