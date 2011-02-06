@@ -1,10 +1,15 @@
 package com.projects.series;
 
+import android.content.Context;
+
+import com.projects.seriesnotifier.R;
+
 public class Serie {
 	private String name;
 	private String id;
 	private String desc;
 	private String imgUrl;
+	private String estado;
 	
 	public Serie()
 	{
@@ -28,6 +33,15 @@ public class Serie {
 		this.id = id;
 		this.desc = desc;
 		this.imgUrl = imgUrl;
+	}
+	
+	public Serie(String name, String id, String desc, String imgUrl, String estado)
+	{
+		this.name = name;
+		this.id = id;
+		this.desc = desc;
+		this.imgUrl = imgUrl;
+		this.estado = estado;
 	}
 
 	public String getName() {
@@ -60,6 +74,20 @@ public class Serie {
 
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+	
+	public String getEstado() {
+		return this.estado;
+	}
+
+	public void setEstado(String estado, Context context) {
+		if(estado.equals("Continuing")){
+			this.estado = context.getString(R.string.Continuing);
+		}else if(estado.equals("Ended")){
+			this.estado = context.getString(R.string.Ended);
+		}else{
+			this.estado = estado;
+		}
 	}
 
 }

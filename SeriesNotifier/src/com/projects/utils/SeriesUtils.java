@@ -566,6 +566,8 @@ public class SeriesUtils {
 							   (Element)entry.getElementsByTagName("Overview").item(0);
 						Element SerieImgUrl =
 							   (Element)entry.getElementsByTagName("banner").item(0);
+						Element SerieState =
+							   (Element)entry.getElementsByTagName("Status").item(0);
 						//String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
 						//if(ended.equals("0")){
 							serie = new Serie();
@@ -575,6 +577,8 @@ public class SeriesUtils {
 							serie.setDesc(SerieDesc.getFirstChild().getNodeValue());
 							if(SerieImgUrl.getFirstChild()!=null)
 							serie.setImgUrl(SerieImgUrl.getFirstChild().getNodeValue());
+							if(SerieState.getFirstChild()!=null)
+							serie.setEstado(SerieState.getFirstChild().getNodeValue(), context);
 						//}
 						
 					}

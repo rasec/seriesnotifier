@@ -52,6 +52,7 @@ public class SerieInfo extends Activity {
         TextView title = (TextView)findViewById(R.id.title);
         TextView desc = (TextView)findViewById(R.id.desc);
         ImageView icon = (ImageView)findViewById(R.id.icon);
+        TextView stat = (TextView)findViewById(R.id.stat);
         
         
         if(tipo == 1)
@@ -62,6 +63,7 @@ public class SerieInfo extends Activity {
         
         title.setText(serie.getName());
         desc.setText(serie.getDesc());
+        stat.setText(serie.getEstado());
         
         icon.setOnClickListener(serieAction);
 		

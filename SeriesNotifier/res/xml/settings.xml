@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:key="first_preferencescreen">
+    <CheckBoxPreference
+            android:key="emailNotifications"
+            android:title="Notificar via email"
+            android:summary="Indique si quiere que se mande un email para notificarle nuevas series"
+            android:defaultValue="false" />
+    <DialogPreference
+            android:key="checkForUpdatesFrecuence"
+            android:title="Frec. comprobaciones"
+            android:summary="Indique cada cuantos días prefier que se hagan las comprobaciones"
+            android:defaultValue="1"
+            android:dialogLayout="@layout/number_picker_pref" >
+    </DialogPreference>
+    <DialogPreference
+            android:key="checkForUpdatesHour"
+            android:title="Hora comprobaciones"
+            android:summary="Indique la hora a la que prefiere que se hagan las comprobaciones"
+            android:defaultValue="12"
+            android:dialogLayout="@layout/number_picker_pref" >
+    </DialogPreference>
+</PreferenceScreen> 
