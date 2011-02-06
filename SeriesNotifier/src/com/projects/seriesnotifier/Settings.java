@@ -22,11 +22,18 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.preference.DialogPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.text.method.DigitsKeyListener;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
@@ -42,21 +49,13 @@ public class Settings extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
         
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                
-        Preference emailNotifications = (Preference) findPreference("emailNotifications");
-        Preference checkForUpdatesFrecuence = (Preference) findPreference("checkForUpdatesFrecuence");
-        Preference checkForUpdatesHour = (Preference) findPreference("checkForUpdatesHour");       
+        EditTextPreference myEditTextPreference = (EditTextPreference) findPreference("checkForUpdatesFrecuence");
+        EditText myEditText = (EditText)myEditTextPreference.getEditText();
+        myEditText.setKeyListener(DigitsKeyListener.getInstance(false,true));
         
-        checkForUpdatesFrecuence.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			public boolean onPreferenceClick(Preference preference) {
-				// TODO Auto-generated method stub
-				int value = preference.getSharedPreferences().getInt("checkForUpdatesFrecuence", -1);
-				Toast.makeText(getBaseContext(), "Valor actual: " + value, Toast.LENGTH_LONG).show();
-				return false;
-			}
-		});
+        EditTextPreference myEditTextPreference2 = (EditTextPreference) findPreference("checkForUpdatesHour");
+        EditText myEditText2 = (EditText)myEditTextPreference2.getEditText();
+        myEditText2.setKeyListener(DigitsKeyListener.getInstance(false,true));
         
     }
 	
