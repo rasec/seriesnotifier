@@ -27,10 +27,12 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,7 +58,7 @@ public class Settings extends PreferenceActivity {
         EditTextPreference myEditTextPreference2 = (EditTextPreference) findPreference("checkForUpdatesHour");
         EditText myEditText2 = (EditText)myEditTextPreference2.getEditText();
         myEditText2.setKeyListener(DigitsKeyListener.getInstance(false,true));
-        
+                
     }
 	
 	@Override 

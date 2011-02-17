@@ -19,7 +19,7 @@ public class NewSerie extends Activity{
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.newserie);
+        setContentView(R.layout.new_serie);
         Button button = (Button)findViewById(R.id.ok_new);
         button.setOnClickListener(setNewSerie);
     }

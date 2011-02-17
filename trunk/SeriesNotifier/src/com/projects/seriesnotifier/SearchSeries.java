@@ -24,7 +24,7 @@ public class SearchSeries extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.searchseries);
+        setContentView(R.layout.search_series);
         populateAutocompleteSerie();
                
 //        Button button = (Button)findViewById(R.id.newserie);

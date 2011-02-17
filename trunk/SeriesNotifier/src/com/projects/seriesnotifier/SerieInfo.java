@@ -57,7 +57,7 @@ public class SerieInfo extends Activity {
         
         if(tipo == 1)
         {
-        	icon.setImageResource(R.drawable.plus);
+        	icon.setImageResource(R.drawable.add);
         }
         
         

@@ -1,62 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    
-    <ImageView
-		android:id="@+id/banner"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" 
-		style="@style/SerieInfoBanner"
-		 />
-    
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        
-        android:layout_below="@id/banner"
-        style="@style/Title"
-        />
-    
-    <ImageView
-		android:id="@+id/icon"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignTop="@id/title"
-		style="@style/SerieInfoImage"
-		android:src="@drawable/minus" />
-    
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Descripción:"
-        android:layout_below="@id/icon"
-        style="@style/DescTitle"
-        />
-	<TextView
-        android:id="@+id/desc"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/description"
-        style="@style/TextDesc"
-        />
-        
-    <TextView
-        android:id="@+id/statTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="Estado:"
-        android:layout_below="@id/desc"
-        style="@style/DescTitle"
-        />
-	<TextView
-        android:id="@+id/stat"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/statTitle"
-        style="@style/TextDesc"
-        />
-          
-</RelativeLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/ScrollView01" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+		>
+	
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    style="@style/SerieInfo">
+	    
+	    <ImageView
+			android:id="@+id/banner"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" 
+			style="@style/SerieInfoBanner"
+			 />
+	    
+	    <TextView
+	        android:id="@+id/title"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/banner"
+	        style="@style/Title"
+	        />
+	    
+	    <ImageView
+			android:id="@+id/icon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@id/title"
+			style="@style/SerieInfoImage"
+			android:src="@drawable/remove" />
+	    
+	    <TextView
+	        android:id="@+id/description"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/DescTitle"
+	        android:layout_below="@id/icon"
+	        style="@style/DescTitle"
+	        />
+		<TextView
+	        android:id="@+id/desc"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_below="@id/description"
+	        style="@style/TextDesc"
+	        />
+	        
+	    <TextView
+	        android:id="@+id/statTitle"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:text="@string/EstadoTitle"
+	        android:layout_below="@id/desc"
+	        style="@style/DescTitle"
+	        />
+		<TextView
+	        android:id="@+id/stat"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_below="@id/statTitle"
+	        style="@style/TextDesc"
+	        />
+	          
+	</RelativeLayout>
+</ScrollView>
