@@ -8,19 +8,30 @@
             android:summary="Indique si quiere que se mande un email para notificarle nuevas series"
             android:defaultValue="false" />
      <EditTextPreference
+     		android:id="@+id/checkForUpdatesFrecuenceDialog"
             android:key="checkForUpdatesFrecuence"
             android:title="Frec. comprobaciones"
             android:summary="Indique cada cuantos días prefier que se hagan las comprobaciones"
-            android:defaultValue="1">
+            android:defaultValue="1"
+            android:dialogLayout="@layout/number_picker_freq">
     </EditTextPreference>
     <EditTextPreference
+    		android:id="@+id/checkForUpdatesHourDialog"
             android:key="checkForUpdatesHour"
             android:title="Hora comprobaciones"
             android:summary="Indique la hora a la que prefiere que se hagan las comprobaciones"
-            android:defaultValue="12">
+            android:defaultValue="12"
+            android:dialogLayout="@layout/number_picker_hour">
     </EditTextPreference>
-            
-    <!-- <DialogPreference
+    
+    <!-- <EditTextPreference
+            android:key="checkForUpdatesHour"
+            android:title="Hora comprobaciones"
+            android:summary="Indique la hora a la que prefiere que se hagan las comprobaciones"
+            android:defaultValue="12"
+    </EditTextPreference>
+              
+     <DialogPreference
             android:key="checkForUpdatesFrecuence"
             android:title="Frec. comprobaciones"
             android:summary="Indique cada cuantos días prefier que se hagan las comprobaciones"
