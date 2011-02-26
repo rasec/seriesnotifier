@@ -16,7 +16,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,73 +37,54 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.os.Handler;
 
 public class NewSearch extends ListActivity {
 
 	static final int NEW_SERIE_DIALOG = 0;
+	
+	private String query;
+	
+	private ProgressDialog progressDialog;
+	
+	private Context contexto;
+	List<Serie> series;
+	List<String> seriesString;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list_serie_search);
-
+		
 		// Se obtiene el par�metro pasado
 		Bundle b = getIntent().getExtras();
 		String q = b.getCharSequence("q").toString();
+		query = q;
 		// Se obtiene el listado de series en base al par�metro
-		getSeries(q);
+		//getSeries(q);
+		contexto = this;
+		AsyncTask<String, Integer, Boolean> task = new NewSearchTask().execute();
 		// dialog.dismiss();
 
 		// En caso de no haber series disponibles se puede
 		// a�adir la serie indicada, para lo que se crea un
 		// listener cuando se pulsa el bot�n a�adir
-		Button button = (Button) findViewById(R.id.ok_new);
-		button.setOnClickListener(setNewSerie);
+		//Button button = (Button) findViewById(R.id.ok_new);
+		//button.setOnClickListener(setNewSerie);
 
-		EditText editview = (EditText) findViewById(R.id.entry_new);
-		editview.setText(q);
+		//EditText editview = (EditText) findViewById(R.id.entry_new);
+		//editview.setText(q);
 	}
 
 	public void getSeries(String query) {
-		List<Serie> series = SeriesUtils.getSeriesByQuery(
+		series = SeriesUtils.getSeriesByQuery(
 				getApplicationContext(), query);
-		List<String> seriesString = new ArrayList<String>();
+		seriesString = new ArrayList<String>();
 		for (Serie serie : series) {
 			seriesString.add(serie.getName());
-		}
-		if (!series.isEmpty()) {
-			setListAdapter(new IconListViewAdapterAdd(this,
-					R.layout.list_item_icon, seriesString, series,
-					R.drawable.add));
-			ListView lv = getListView();
-			lv.setTextFilterEnabled(true);
-
-			lv.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					// Navegamos
-					startActivity(Integer
-							.parseInt((String) (((TextView) ((RelativeLayout) view)
-									.getChildAt(0)).getTag())));
-				}
-			});
-
-			lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-				public boolean onItemLongClick(AdapterView<?> parent,
-						View view, int position, long id) {
-					showOptionsDialog(
-							(((TextView) ((RelativeLayout) view).getChildAt(0))
-									.getText()),
-							Integer
-									.parseInt((String) (((TextView) ((RelativeLayout) view)
-											.getChildAt(0)).getTag())));
-					// createNotification(((TextView) view).getText());
-					return true;
-				}
-			});
 		}
 	}
 
@@ -117,7 +100,7 @@ public class NewSearch extends ListActivity {
 			toRet = getString(R.string.addAlreadyExists) + serie;
 		else if (ret == -2)
 			toRet = getString(R.string.addNotExists) + serie;
-		showDialog(toRet);
+		showToast(toRet);
 	}
 
 	public void showConfirmDialog(String serie, int id) {
@@ -219,6 +202,13 @@ public class NewSearch extends ListActivity {
 				});
 		dialog.show();
 	}
+	
+	public void showToast(String message){
+		Context context = getApplicationContext();
+		int duration = Toast.LENGTH_SHORT;
+		Toast toast = Toast.makeText(context, message, duration);
+		toast.show();
+	}
 
 	public void startActivity(int id) {
 		Intent intent = new Intent().setClass(getApplicationContext(),
@@ -289,5 +279,77 @@ public class NewSearch extends ListActivity {
 
 			}
 		};
+	}
+	
+	public void showProgressDialog() {
+		progressDialog = ProgressDialog.show(contexto, "Progreso", "Buscando...", true);
+	}
+	
+	public void removeProgressDialog() {
+		progressDialog.dismiss();
+	}
+	
+	public void updateView(){
+		setContentView(R.layout.list_serie_search);
+		if (!series.isEmpty()) {
+			setListAdapter(new IconListViewAdapterAdd(getApplicationContext(),
+					R.layout.list_item_icon, seriesString, series,
+					R.drawable.add));
+			ListView lv = getListView();
+			lv.setTextFilterEnabled(true);
+	
+			lv.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// Navegamos
+					startActivity(Integer
+							.parseInt((String) (((TextView) ((RelativeLayout) view)
+									.getChildAt(0)).getTag())));
+				}
+			});
+	
+			lv.setOnItemLongClickListener(new OnItemLongClickListener() {
+				public boolean onItemLongClick(AdapterView<?> parent,
+						View view, int position, long id) {
+					showOptionsDialog(
+							(((TextView) ((RelativeLayout) view).getChildAt(0))
+									.getText()),
+							Integer
+									.parseInt((String) (((TextView) ((RelativeLayout) view)
+											.getChildAt(0)).getTag())));
+					// createNotification(((TextView) view).getText());
+					return true;
+				}
+			});
+		}
+	}
+	
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			updateView();
+		}
+	};
+	
+	class NewSearchTask extends AsyncTask<String, Integer, Boolean> {
+		  @Override
+		  protected Boolean doInBackground(String... params) {
+		    try {
+		    	getSeries(query);
+		    	handler.sendEmptyMessage(0);
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		    }
+		    return Boolean.TRUE;   // Return your real result here
+		  }
+		  @Override
+		  protected void onPreExecute() {
+		    showProgressDialog();
+		  }
+		  @Override
+		  protected void onPostExecute(Boolean result) {
+		    // result is the value returned from doInBackground
+		    removeProgressDialog();
+		  }
 	}
 }

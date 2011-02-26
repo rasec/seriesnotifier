@@ -7,15 +7,21 @@ import java.util.List;
 
 import com.projects.series.Serie;
 import com.projects.seriesnotifier.NewSearch.CommandAddSerie;
+import com.projects.seriesnotifier.NewSearch.NewSearchTask;
 import com.projects.seriesnotifier.OwnSeries.CommandDeleteSerie;
 import com.projects.seriesnotifier.OwnSeries.IconListViewAdapterDelete;
 import com.projects.utils.SeriesUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,49 +29,30 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SerieInfo extends Activity {
 
-	int tipo;
-	Serie serie;
+	private int tipo;
+	private Serie serie;
+	private ImageView img;
+	private int id;
+	private ProgressDialog progressDialog;
+		
+	private Context contexto;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.serie_info);
-		
+				
 		Bundle b = getIntent().getExtras();
-		int id = b.getInt("id");
+		id = b.getInt("id");
+		contexto = this;
 		
 		tipo = b.getInt("type");
 		
-		serie = SeriesUtils.getSeriesInfo(id, getApplicationContext());
-		
-		ImageView img = (ImageView)findViewById(R.id.banner);
-		
-		String bannerUrl = getString(R.string.bannerUrl);
-		
-		Drawable drawable = LoadImageFromWebOperations(bannerUrl + serie.getImgUrl());
-		
-        img.setImageDrawable(drawable);
-        
-        TextView title = (TextView)findViewById(R.id.title);
-        TextView desc = (TextView)findViewById(R.id.desc);
-        ImageView icon = (ImageView)findViewById(R.id.icon);
-        TextView stat = (TextView)findViewById(R.id.stat);
-        
-        
-        if(tipo == 1)
-        {
-        	icon.setImageResource(R.drawable.add);
-        }
-        
-        
-        title.setText(serie.getName());
-        desc.setText(serie.getDesc());
-        stat.setText(serie.getEstado());
-        
-        icon.setOnClickListener(serieAction);
+		AsyncTask<String, Integer, Boolean> task = new NewSearchTask().execute();
+				
 		
 	}
 	
@@ -136,7 +123,7 @@ public class SerieInfo extends Activity {
 			toRet = getString(R.string.addAlreadyExists) + serie;
 		else if (ret == -2)
 			toRet = getString(R.string.addNotExists) + serie;
-		showDialog(toRet);
+		showToast(toRet);
 	}
 	
 	public void showDialog(String message) {
@@ -189,7 +176,7 @@ public class SerieInfo extends Activity {
 	 		message = getString(R.string.delSerie) + serie;
 	 	else if(ret == -1)
 	 		message = getString(R.string.delSerieNotExists) + serie;
-		showDialogDelete(message);
+		showToast(message);
 	}
 	
 	public void showDialogDelete(String message){
@@ -202,6 +189,79 @@ public class SerieInfo extends Activity {
 		  }
 		});
 		dialog.show();
+	}
+	
+	public void showToast(String message){
+		Context context = getApplicationContext();
+		int duration = Toast.LENGTH_SHORT;
+		Toast toast = Toast.makeText(context, message, duration);
+		toast.show();
+	}
+	
+	public void updateView() {
+		setContentView(R.layout.serie_info);
+		img = (ImageView)findViewById(R.id.banner);
+		String bannerUrl = getString(R.string.bannerUrl);
+		
+		Drawable drawable = LoadImageFromWebOperations(bannerUrl + serie.getImgUrl());
+		
+        img.setImageDrawable(drawable);
+        
+        TextView title = (TextView)findViewById(R.id.title);
+        TextView desc = (TextView)findViewById(R.id.desc);
+        ImageView icon = (ImageView)findViewById(R.id.icon);
+        TextView stat = (TextView)findViewById(R.id.stat);
+        
+        
+        if(tipo == 1)
+        {
+        	icon.setImageResource(R.drawable.add);
+        }
+        
+        
+        title.setText(serie.getName());
+        desc.setText(serie.getDesc());
+        stat.setText(serie.getEstado());
+        
+        icon.setOnClickListener(serieAction);
+		
+	}
+	
+	public void showProgressDialog() {
+		progressDialog = ProgressDialog.show(contexto, "Progreso", "Obteniendo información de la serie...", true);
+	}
+	
+	public void removeProgressDialog() {
+		progressDialog.dismiss();
+	}
+	
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			updateView();
+		}
+	};
+	
+	class NewSearchTask extends AsyncTask<String, Integer, Boolean> {
+		  @Override
+		  protected Boolean doInBackground(String... params) {
+		    try {
+		    	serie = SeriesUtils.getSeriesInfo(id, contexto);
+		    	handler.sendEmptyMessage(0);
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		    }
+		    return Boolean.TRUE;   // Return your real result here
+		  }
+		  @Override
+		  protected void onPreExecute() {
+		    showProgressDialog();
+		  }
+		  @Override
+		  protected void onPostExecute(Boolean result) {
+		    // result is the value returned from doInBackground
+		    removeProgressDialog();
+		  }
 	}
 
 }
