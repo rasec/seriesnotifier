@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.projects.adapters.*;
 import com.projects.series.Serie;
@@ -136,7 +137,7 @@ public class OwnSeries extends ListActivity {
 	 		message = getString(R.string.delSerie) + serie;
 	 	else if(ret == -1)
 	 		message = getString(R.string.delSerieNotExists) + serie;
-	 	showDialog(message);
+	 	showToast(message);
 	}
 	
 	
@@ -214,6 +215,13 @@ public class OwnSeries extends ListActivity {
 			}
 					
 		  }
+	}
+	
+	public void showToast(String message){
+		Context context = getApplicationContext();
+		int duration = Toast.LENGTH_SHORT;
+		Toast toast = Toast.makeText(context, message, duration);
+		toast.show();
 	}
 	
 public class IconListViewAdapterDelete extends ArrayAdapter<String>{
