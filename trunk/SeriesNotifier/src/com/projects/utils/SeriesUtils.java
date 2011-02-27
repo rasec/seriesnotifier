@@ -613,7 +613,7 @@ public class SeriesUtils {
 		String site = context.getString(R.string.getUpdates);
 		String paramName = context.getString(R.string.getUpdatesParam);
 		
-		long epoch = (System.currentTimeMillis()/1000) - (86400*7);
+		long epoch = (System.currentTimeMillis()/1000) - (86400);
 		
 		String epochString = String.valueOf(epoch);
 		try 
@@ -681,7 +681,6 @@ public class SeriesUtils {
 				}
 			}
 		}
-		
 		return myUpdatesSeries;
 	}
 	

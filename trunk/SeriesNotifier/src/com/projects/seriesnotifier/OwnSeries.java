@@ -32,6 +32,7 @@ import com.projects.utils.*;
 
 public class OwnSeries extends ListActivity {
 	static int i = 0;
+	final int NOTIFICATION_ID = 1;
 			
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,8 +112,9 @@ public class OwnSeries extends ListActivity {
 	    
 	    note.setLatestEventInfo(context, title, contText, contentIntent);
 	    
-	    final int HELLO_ID = 1;
-	    notMan.notify(HELLO_ID, note);
+	    note.defaults |= Notification.DEFAULT_LIGHTS;
+	   
+	    notMan.notify(NOTIFICATION_ID, note);
 	}
 	
 	private void deleteElement(CharSequence text) {
