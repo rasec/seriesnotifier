@@ -42,8 +42,8 @@
     <string name="addAlreadyExists">No se ha añadido la serie, ya existia: </string>
     <string name="addNotExists">No se ha añadido la serie, no existe ninguna serie con el nombre: </string>
     
-    <string name="newEpisode">Nuevo episodio de: </string>
-    <string name="newEpisodeAdvise">Existe un nuevo capítulo apunto de emitirse: </string>
+    <string name="newEpisode"> nuevos episodios </string>
+    <string name="newEpisodeAdvise">Existen nuevos capítulos apunto de emitirse </string>
     
     <string name="delSerie">Serie eliminada correctamente: </string>
     <string name="delSerieNotExists">No se ha eliminado (no existia): </string>

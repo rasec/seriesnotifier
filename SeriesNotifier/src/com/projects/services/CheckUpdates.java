@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 public class CheckUpdates extends IntentService {
 
+	final int NOTIFICATION_ID = 1;
+	
 	public CheckUpdates() {
 		super("Nombre sin sentido");
 		// TODO Auto-generated constructor stub
@@ -55,22 +57,21 @@ public class CheckUpdates extends IntentService {
 	    NotificationManager notMan = (NotificationManager) getSystemService(ns);
 	    
 	    // Create the Notification with an icon, a text and a time
-	    int icon = R.drawable.logo;
-	    CharSequence text = getString(R.string.newEpisode) + desc;
+	    int icon = R.drawable.logo3;
+	    CharSequence text =  desc + " " + getString(R.string.newEpisode);
 	    long when = System.currentTimeMillis();
 	    Notification note = new Notification(icon, text, when);
 	    //note.defaults |= Notification.DEFAULT_VIBRATE;
 	    
 	    // Create the expanded message and the Intent
 	    Context context = getApplicationContext();
-	    CharSequence title = getString(R.string.newEpisode) + desc;
-	    CharSequence contText = getString(R.string.newEpisodeAdvise) + desc;
+	    CharSequence title = desc + " " + getString(R.string.newEpisode);
+	    CharSequence contText = getString(R.string.newEpisodeAdvise);
 	    Intent notificationIntent = new Intent(this, NewEpisode.class);
 	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 	    
 	    note.setLatestEventInfo(context, title, contText, contentIntent);
 	    
-	    final int HELLO_ID = 1;
-	    notMan.notify(HELLO_ID, note);
+	    notMan.notify(NOTIFICATION_ID, note);
 	}
 }
