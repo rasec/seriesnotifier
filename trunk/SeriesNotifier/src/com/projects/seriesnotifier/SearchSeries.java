@@ -1,5 +1,6 @@
 package com.projects.seriesnotifier;
 
+import com.projects.services.CheckUpdates;
 import com.projects.utils.*;
 
 import android.app.Activity;

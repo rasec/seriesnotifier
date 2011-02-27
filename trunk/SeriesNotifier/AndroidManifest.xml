@@ -55,6 +55,9 @@
         </activity>       
 
     	<activity android:name="SerieInfo"></activity>
+    	
+    	<service android:name="com.projects.services.CheckUpdates" android:exported="false"></service>
+    	
 	</application>
 	
     <uses-sdk android:minSdkVersion="3" />

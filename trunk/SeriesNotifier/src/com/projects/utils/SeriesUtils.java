@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Arrays;
 
@@ -602,6 +603,86 @@ public class SeriesUtils {
 		}
 		
 		return serie;
+	}
+	
+	public static List<Serie> getUpdatesTvDBList(Context context)
+	{
+		URL url;
+		Serie serie;
+		List<Serie> seriesNuevas = new ArrayList<Serie>();
+		String site = context.getString(R.string.getUpdates);
+		String paramName = context.getString(R.string.getUpdatesParam);
+		
+		long epoch = (System.currentTimeMillis()/1000) - (86400*7);
+		
+		String epochString = String.valueOf(epoch);
+		try 
+		{
+			
+			url = new URL(site+"?"+paramName+"="+URLEncoder.encode( epochString ));
+			URLConnection connection;
+			connection = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection)connection;
+			int responseCode = httpConnection.getResponseCode();
+			if(responseCode == HttpURLConnection.HTTP_OK){
+				
+				InputStream in = httpConnection.getInputStream();
+				DocumentBuilderFactory dbf;
+				dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				// 
+				Document dom = db.parse(in);
+				Element docEle = dom.getDocumentElement();
+				// 
+				NodeList nl = docEle.getElementsByTagName("Series");
+				if (nl != null && nl.getLength() > 0) {
+					for (int i = 0 ; i < nl.getLength(); i++) {
+						Element SerieId = (Element)nl.item(i);
+						//String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
+						//if(ended.equals("0")){
+							serie = new Serie();
+							serie.setId(SerieId.getFirstChild().getNodeValue());
+							seriesNuevas.add(serie);
+						//}
+						
+					}
+				}								
+				
+			}
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return filterByOwnSeries(context, seriesNuevas);
+	}
+	
+	public static List<Serie> filterByOwnSeries(Context context, List<Serie> updatesSeries)
+	{
+		List<Serie> myUpdatesSeries = new ArrayList<Serie>();
+		List<Serie> mySeries = getDBSeries(context);
+		
+		for (Serie serie : updatesSeries) {
+			for (Serie mySerie : mySeries) {
+				if(serie.getId().equals(mySerie.getId())){
+					myUpdatesSeries.add(serie);
+				}
+			}
+		}
+		
+		return myUpdatesSeries;
 	}
 	
 }
