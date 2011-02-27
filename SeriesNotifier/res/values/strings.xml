@@ -22,6 +22,8 @@
     <string name="infoSerieUrl">http://www.thetvdb.com/api/121E6F2A75E6F1FC/series/</string>
     <string name="infoSerieUrlEnd">/all/es.xml</string>
     <string name="bannerUrl">http://www.thetvdb.com/banners/_cache/</string>
+    <string name="getUpdates">http://www.thetvdb.com/api/Updates.php</string>
+    <string name="getUpdatesParam">time</string>
     
     
     <string name="getSeriesTvRange">http://services.tvrage.com/feeds/search.php</string>
@@ -50,7 +52,7 @@
     <string name="notify">Notificar</string>
     <string name="delete">Eliminar</string>
     <string name="add">Añadir</string>
-    <string name="open"></string>
+    <string name="open">Ver Info</string>
     
     <string name="searching">Buscando...</string>
     

@@ -2,6 +2,7 @@ package com.projects.seriesnotifier;
 
 import com.projects.database.DBAdapter;
 import com.projects.seriesnotifier.R;
+import com.projects.services.CheckUpdates;
 import com.projects.utils.SeriesUtils;
 
 import android.app.TabActivity;
@@ -19,7 +20,9 @@ public class Notifier extends TabActivity {
         //TODO: delete this sentence
         //deleteFile(SeriesUtils.OWNSERIES);        
         //deleteFile(SeriesUtils.SERIES);
-
+        Intent service = new Intent().setClass(this, CheckUpdates.class);
+        startService(service);
+        
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
         TabHost.TabSpec spec;  // Resusable TabSpec for each tab
