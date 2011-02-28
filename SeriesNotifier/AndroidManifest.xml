@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".NewEpisode"
+        <activity android:name=".NewEpisodes"
                   android:label="@string/new_episode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
