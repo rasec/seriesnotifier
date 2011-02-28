@@ -372,11 +372,46 @@ public class SeriesUtils {
 		return series;		  
 	}
 	
+	public static List<Serie> getDBSeriesUpdates(Context context)
+	{
+		DBAdapter db = new DBAdapter(context);
+		int cols = 0;
+		db.open();
+		Serie serie = new Serie();
+		List<Serie> series = new ArrayList<Serie>();
+  
+		Cursor cursor = db.getSeriesUpdates();
+		cursor.moveToFirst();
+		cols = cursor.getCount();
+		if(cols > 0){
+			for(int i = 0; i < cursor.getCount(); i++)
+			{
+				cursor.moveToPosition(i);
+				serie = new Serie();
+				serie.setId(cursor.getString(0));
+				serie.setName(cursor.getString(1));
+				series.add(serie);
+			}
+		}
+  
+		db.close();
+		return series;		  
+	}
+	
 	public static long addDBSerie(String serie, int id, Context context){
 		DBAdapter db = new DBAdapter(context);
 		long ret = 0;
 		db.open();
 		ret =  db.insertSerie(serie, id);
+		db.close();
+		return ret;
+	}
+	
+	public static long addDBSerieUpdates(String serie, int id, Context context){
+		DBAdapter db = new DBAdapter(context);
+		long ret = 0;
+		db.open();
+		ret =  db.insertSerieUpdate(serie, id);
 		db.close();
 		return ret;
 	}
@@ -407,6 +442,16 @@ public class SeriesUtils {
 		return ret;
 	}
 	
+	
+	public static void updateDBSeriesUpdates(Context context)
+	{
+		DBAdapter db = new DBAdapter(context);
+		db.open();
+  
+		db.updateSeriesUpdates();
+  
+		db.close();		  
+	}
 	
 	/* METODOS PARA EL ACCESO A THETVDB */
 	public static String getSeriesTvDB(String name, Context context)
@@ -678,6 +723,7 @@ public class SeriesUtils {
 			for (Serie mySerie : mySeries) {
 				if(serie.getId().equals(mySerie.getId())){
 					myUpdatesSeries.add(serie);
+					addDBSerieUpdates(mySerie.getName(), Integer.parseInt(mySerie.getId()), context);
 				}
 			}
 		}

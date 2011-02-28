@@ -14,7 +14,7 @@
     
 	<string name="new_search">SeriesNotifier - Resultados de la busqueda</string>
     <string name="newserie">SeriesNotifier - Nueva Serie</string>
-    <string name="new_episode">SeriesNotifier - Nuevo episodio</string>
+    <string name="new_episode">SeriesNotifier - Nuevos episodios</string>
     
     <string name="getSeries">http://www.thetvdb.com/api/GetSeries.php</string>
     <string name="getSeriesParam">seriesname</string>
@@ -30,8 +30,7 @@
     <string name="getSeriesParamTvRange">show</string>
     <string name="apiKeyTvRange">MksMRmmlqSXKePy5vHP8</string>
     
-    <string name="newEpisdeProv">Existe una nueva serie apunto de ser emitida de la lista de series elegida</string>
-    <string name="optionsProv">Aquí irán las propiedades u opciones de la aplicación</string>
+    <string name="newEpisdeProv">Las siguientes series tienen actualizaciones:</string>
     
     <string name="askToAddSerie">¿Desea añadir a su lista de series: </string>
     

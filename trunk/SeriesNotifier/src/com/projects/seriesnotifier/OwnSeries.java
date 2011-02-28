@@ -107,7 +107,7 @@ public class OwnSeries extends ListActivity {
 	    Context context = getApplicationContext();
 	    CharSequence title = getString(R.string.newEpisode) + serie;
 	    CharSequence contText = getString(R.string.newEpisodeAdvise) + serie;
-	    Intent notificationIntent = new Intent(this, NewEpisode.class);
+	    Intent notificationIntent = new Intent(this, NewEpisodes.class);
 	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 	    
 	    note.setLatestEventInfo(context, title, contText, contentIntent);

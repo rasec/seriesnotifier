@@ -3,7 +3,7 @@ package com.projects.services;
 import java.util.List;
 
 import com.projects.series.Serie;
-import com.projects.seriesnotifier.NewEpisode;
+import com.projects.seriesnotifier.NewEpisodes;
 import com.projects.seriesnotifier.R;
 import com.projects.utils.SeriesUtils;
 
@@ -67,7 +67,7 @@ public class CheckUpdates extends IntentService {
 	    Context context = getApplicationContext();
 	    CharSequence title = desc + " " + getString(R.string.newEpisode);
 	    CharSequence contText = getString(R.string.newEpisodeAdvise);
-	    Intent notificationIntent = new Intent(this, NewEpisode.class);
+	    Intent notificationIntent = new Intent(this, NewEpisodes.class);
 	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 	    
 	    note.setLatestEventInfo(context, title, contText, contentIntent);
