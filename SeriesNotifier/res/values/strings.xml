@@ -15,6 +15,7 @@
 	<string name="new_search">SeriesNotifier - Resultados de la busqueda</string>
     <string name="newserie">SeriesNotifier - Nueva Serie</string>
     <string name="new_episode">SeriesNotifier - Nuevos episodios</string>
+    <string name="new_episode_title">Nuevos episodios</string>
     
     <string name="getSeries">http://www.thetvdb.com/api/GetSeries.php</string>
     <string name="getSeriesParam">seriesname</string>
@@ -65,6 +66,9 @@
     <string name="Continuing">Continua emitiendose</string>
     <string name="Ended">Finalizada</string>
     
+    <string name="days">Días</string>
+    <string name="hours">Horas</string>
         
 </resources>
+
 

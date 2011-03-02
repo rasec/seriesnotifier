@@ -7,6 +7,7 @@ import com.projects.series.Serie;
 import com.projects.utils.SeriesUtils;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -37,15 +38,12 @@ public class NewEpisodes extends Activity{
 	    
 	    List<Serie> series = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
 	    
-		array.add(0, "Prueba");
-		aa.notifyDataSetChanged();
-	    
-	    /*for (Serie serie : series) {
+		for (Serie serie : series) {
 	    	array.add(0, serie.getName());
 			aa.notifyDataSetChanged();
-		}*/
+		}
 	    
-	    //SeriesUtils.updateDBSeriesUpdates(getApplicationContext());
+	    SeriesUtils.updateDBSeriesUpdates(getApplicationContext());
 
 	}
 

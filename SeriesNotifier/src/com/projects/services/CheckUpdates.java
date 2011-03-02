@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.projects.series.Serie;
 import com.projects.seriesnotifier.NewEpisodes;
+import com.projects.seriesnotifier.Notifier;
 import com.projects.seriesnotifier.R;
 import com.projects.utils.SeriesUtils;
 
@@ -14,6 +15,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
 
@@ -22,7 +24,7 @@ public class CheckUpdates extends IntentService {
 	final int NOTIFICATION_ID = 1;
 	
 	public CheckUpdates() {
-		super("Nombre sin sentido");
+		super("");
 		// TODO Auto-generated constructor stub
 	}
 
@@ -34,7 +36,7 @@ public class CheckUpdates extends IntentService {
 	public void handleCommand(Intent intent){
 		//showToast("Servicio Iniciado");
 		List<Serie> seriesNuevas = checkUpdates();
-		if(seriesNuevas != null) {
+		if(seriesNuevas != null && seriesNuevas.size() > 0) {
 			createNotification("(" + seriesNuevas.size() + ")");
 		}
 	}
@@ -67,7 +69,10 @@ public class CheckUpdates extends IntentService {
 	    Context context = getApplicationContext();
 	    CharSequence title = desc + " " + getString(R.string.newEpisode);
 	    CharSequence contText = getString(R.string.newEpisodeAdvise);
-	    Intent notificationIntent = new Intent(this, NewEpisodes.class);
+	    Intent notificationIntent = new Intent(this, Notifier.class);
+	    Bundle b = new Bundle();
+		b.putBoolean("notify", true);
+		notificationIntent.putExtras(b);
 	    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 	    
 	    note.setLatestEventInfo(context, title, contText, contentIntent);
