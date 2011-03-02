@@ -1,11 +1,8 @@
 package com.projects.database;
 
-import com.projects.series.Serie;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -15,7 +12,11 @@ public class DBAdapter {
 	private static final String DATABASE_NAME = "seriesnotifier";
 	private static final String DATABASE_TABLE_SERIES = "series";
 	private static final String DATABASE_TABLE_SERIES_UPDATES = "seriesUpdates";
-	private static final int DATABASE_VERSION = 1;
+	private static final String DATABASE_TABLE_EPOCH_DATE = "epochDate";
+	
+	private static final String EPOCH_ID = "epoch";
+	
+	private static final int DATABASE_VERSION = 2;
 	
 	// The index (key) column name for use in where clauses.
 	public static final String KEY_ID="_id";
@@ -24,14 +25,19 @@ public class DBAdapter {
 	
 	public static final String KEY_VISTO="visto";
 	
+	public static final String KEY_EPOCH="epoch";
+	
 	public static final int NAME_COLUMN = 1;
 	
 	private static final String TAG = "DBAdapter";
 
-	private static final String DATABASE_CREATE = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_SERIES + " (" + KEY_ID + " integer primary key autoincrement, "
+	private static final String CREATE_TABLE_SERIES = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_SERIES + " (" + KEY_ID + " integer primary key autoincrement, "
 			+ KEY_NAME + " text not null unique);";
-	private static final String TABLE_CREATE_UPDATES = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_SERIES_UPDATES + " (" + KEY_ID + " integer primary key autoincrement, "
+	private static final String CREATE_TABLE_UPDATES = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_SERIES_UPDATES + " (" + KEY_ID + " integer primary key autoincrement, "
 	+ KEY_NAME + " text not null, " + KEY_VISTO + " BOOLEAN);";
+	
+	private static final String CREATE_TABLE_EPOCH = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_EPOCH_DATE + " (" + KEY_ID + " text primary key, "
+	+ KEY_EPOCH + " BIGINT not null);";
 
 	private final Context context;
 
@@ -75,6 +81,24 @@ public class DBAdapter {
 			initialValues.put(KEY_ID, id);
 			initialValues.put(KEY_VISTO, 0);
 			ret = db.insert(DATABASE_TABLE_SERIES_UPDATES, null, initialValues);
+			
+		}
+		return ret;
+	}
+	
+	public long insertEpochDate(long epoch) {
+		long ret = 0;
+		ContentValues initialValues = new ContentValues();
+		Cursor epochs = getEpochDate();
+		if (epochs.getCount() > 0) {
+			epochs.moveToFirst();
+			initialValues.put(KEY_ID, EPOCH_ID);
+			initialValues.put(KEY_EPOCH, epoch);
+			ret = db.update(DATABASE_TABLE_EPOCH_DATE, initialValues, null, null);
+		} else {
+			initialValues.put(KEY_ID, EPOCH_ID);
+			initialValues.put(KEY_EPOCH, epoch);
+			ret = db.insert(DATABASE_TABLE_EPOCH_DATE, null, initialValues);
 			
 		}
 		return ret;
@@ -128,6 +152,11 @@ public class DBAdapter {
 				KEY_ID + " = " + id, null, null, null, KEY_NAME);
 	}
 	
+	public Cursor getEpochDate() {
+		return db.query(DATABASE_TABLE_EPOCH_DATE, new String[] { KEY_EPOCH },
+				null, null, null, null, KEY_EPOCH);
+	}
+	
 	public int updateSeriesUpdates() {
 		ContentValues updatesValues = new ContentValues();
 		updatesValues.put(KEY_VISTO, 1);
@@ -141,19 +170,22 @@ public class DBAdapter {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			db.execSQL(DATABASE_CREATE);
-			db.execSQL(TABLE_CREATE_UPDATES);
+			db.execSQL(CREATE_TABLE_SERIES);
+			db.execSQL(CREATE_TABLE_UPDATES);
+			db.execSQL(CREATE_TABLE_EPOCH);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 					+ newVersion + ", which will destroy all old data");
-			db.execSQL("DROP TABLE IF EXISTS serie");
-			db.execSQL("DROP TABLE IF EXISTS seriesUpdates");
+			db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_SERIES);
+			db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_SERIES_UPDATES);
+			db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_EPOCH_DATE);
 			onCreate(db);
 		}
 	}
 
 }
+
 

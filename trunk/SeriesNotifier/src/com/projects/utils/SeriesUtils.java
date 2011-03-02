@@ -658,7 +658,10 @@ public class SeriesUtils {
 		String site = context.getString(R.string.getUpdates);
 		String paramName = context.getString(R.string.getUpdatesParam);
 		
-		long epoch = (System.currentTimeMillis()/1000) - (86400);
+		long epoch = DateUtils.getEpochDate(context);
+		if (epoch == -1) {
+			epoch = (System.currentTimeMillis()/1000) - (86400);
+		}
 		
 		String epochString = String.valueOf(epoch);
 		try 
@@ -710,7 +713,7 @@ public class SeriesUtils {
 			e.printStackTrace();
 		}
 		
-		
+		DateUtils.insertEpochDate(context, (System.currentTimeMillis()/1000));
 		return filterByOwnSeries(context, seriesNuevas);
 	}
 	
