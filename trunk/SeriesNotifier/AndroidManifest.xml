@@ -12,47 +12,19 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".SearchSeries"
-                  android:label="@string/search_series">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".SearchSeries" android:label="@string/search_series"> </activity>
         
-        <activity android:name=".OwnSeries"
-                  android:label="@string/own_series">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".OwnSeries" android:label="@string/own_series"></activity>
         
-        <activity android:name=".Settings"
-                  android:label="@string/settings">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".OwnSeriesClean" android:label="@string/own_series"></activity>
         
-        <activity android:name=".NewEpisodes"
-                  android:label="@string/new_episode">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Settings" android:label="@string/settings"> </activity>
         
-        <activity android:name=".NewSerie"
-                  android:label="@string/newserie">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".NewEpisodes" android:label="@string/new_episode"> </activity>
         
-        <activity android:name=".NewSearch"
-                  android:label="@string/new_search">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>       
+        <activity android:name=".NewSerie" android:label="@string/newserie"> </activity>
+        
+        <activity android:name=".NewSearch" android:label="@string/new_search"></activity>       
 
     	<activity android:name="SerieInfo"></activity>
     	
