@@ -25,6 +25,8 @@
         <activity android:name=".NewSerie" android:label="@string/newserie"> </activity>
         
         <activity android:name=".NewSearch" android:label="@string/new_search"></activity>       
+        
+        <activity android:name=".NewSearchClean" android:label="@string/new_search"></activity>
 
     	<activity android:name="SerieInfo"></activity>
     	

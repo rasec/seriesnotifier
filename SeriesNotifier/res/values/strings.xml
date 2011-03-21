@@ -55,6 +55,7 @@
     <string name="open">Ver Info</string>
     
     <string name="searching">Buscando...</string>
+    <string name="progress">Progreso</string>
     
     <string name="textInputSerieSearch">Buscar series:</string>
     <string name="textInputSerieAdd">Escriba el nombre de una serie para añadir:</string>

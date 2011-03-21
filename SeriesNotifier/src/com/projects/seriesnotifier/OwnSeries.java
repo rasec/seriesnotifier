@@ -26,7 +26,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.projects.adapters.*;
 import com.projects.series.Serie;
 import com.projects.utils.*;
 
