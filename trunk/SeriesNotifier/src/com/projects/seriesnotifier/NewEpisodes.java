@@ -7,13 +7,11 @@ import com.projects.series.Serie;
 import com.projects.utils.SeriesUtils;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class NewEpisodes extends Activity{
 	

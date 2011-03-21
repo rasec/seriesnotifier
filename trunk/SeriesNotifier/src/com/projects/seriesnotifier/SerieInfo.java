@@ -2,14 +2,8 @@ package com.projects.seriesnotifier;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.projects.series.Serie;
-import com.projects.seriesnotifier.NewSearch.CommandAddSerie;
-import com.projects.seriesnotifier.NewSearch.NewSearchTask;
-import com.projects.seriesnotifier.OwnSeries.CommandDeleteSerie;
-import com.projects.seriesnotifier.OwnSeries.IconListViewAdapterDelete;
 import com.projects.utils.SeriesUtils;
 
 import android.app.Activity;
@@ -24,10 +18,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
