@@ -1,9 +1,7 @@
 package com.projects.seriesnotifier;
 
-import com.projects.database.DBAdapter;
 import com.projects.seriesnotifier.R;
 import com.projects.services.CheckUpdates;
-import com.projects.utils.SeriesUtils;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -43,7 +41,7 @@ public class Notifier extends TabActivity {
         tabHost.addTab(spec);
 
         // Do the same for the other tabs
-        intent = new Intent().setClass(this, OwnSeries.class);
+        intent = new Intent().setClass(this, OwnSeriesClean.class);
         spec = tabHost.newTabSpec("OwnSeries").setIndicator(getString(R.string.my_series),
                           res.getDrawable(R.drawable.tab_own_series))
                       .setContent(intent);
