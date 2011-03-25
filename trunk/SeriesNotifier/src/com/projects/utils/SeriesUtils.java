@@ -717,6 +717,73 @@ public class SeriesUtils {
 		return filterByOwnSeries(context, seriesNuevas);
 	}
 	
+	public static List<Serie> getUpdatesService(Context context)
+	{
+		URL url;
+		Serie serie;
+		List<Serie> seriesNuevas = new ArrayList<Serie>();
+		String site = context.getString(R.string.getUpdatesService);
+		String paramName = context.getString(R.string.getUpdatesParam);
+		
+		long epoch = DateUtils.getEpochDate(context);
+		if (epoch == -1) {
+			epoch = (System.currentTimeMillis()/1000) - (86400*30);
+		}
+		
+		String epochString = String.valueOf(epoch);
+		try 
+		{
+			
+			url = new URL(site+"?"+paramName+"="+URLEncoder.encode( epochString ));
+			URLConnection connection;
+			connection = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection)connection;
+			int responseCode = httpConnection.getResponseCode();
+			if(responseCode == HttpURLConnection.HTTP_OK){
+				
+				InputStream in = httpConnection.getInputStream();
+				DocumentBuilderFactory dbf;
+				dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				// 
+				Document dom = db.parse(in);
+				Element docEle = dom.getDocumentElement();
+				// 
+				NodeList nl = docEle.getElementsByTagName("serie");
+				if (nl != null && nl.getLength() > 0) {
+					for (int i = 0 ; i < nl.getLength(); i++) {
+						Element SerieId = (Element)nl.item(i);
+						//String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
+						//if(ended.equals("0")){
+							serie = new Serie();
+							serie.setId(SerieId.getFirstChild().getNodeValue());
+							seriesNuevas.add(serie);
+						//}
+						
+					}
+				}								
+				
+			}
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		DateUtils.insertEpochDate(context, (System.currentTimeMillis()/1000));
+		return filterByOwnSeries(context, seriesNuevas);
+	}
+	
 	public static List<Serie> filterByOwnSeries(Context context, List<Serie> updatesSeries)
 	{
 		List<Serie> myUpdatesSeries = new ArrayList<Serie>();

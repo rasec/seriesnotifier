@@ -24,6 +24,7 @@
     <string name="infoSerieUrlEnd">/all/es.xml</string>
     <string name="bannerUrl">http://www.thetvdb.com/banners/_cache/</string>
     <string name="getUpdates">http://www.thetvdb.com/api/Updates.php</string>
+    <string name="getUpdatesService">http://www.cesardelacruz.es/projects/seriesnotifier/updates.php</string>
     <string name="getUpdatesParam">time</string>
     
     
