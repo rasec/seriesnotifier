@@ -49,7 +49,7 @@ public class CheckUpdates extends IntentService {
 	}
 	
 	public List<Serie> checkUpdates(){
-		List<Serie> seriesNuevas = SeriesUtils.getUpdatesTvDBList(getApplicationContext());
+		List<Serie> seriesNuevas = SeriesUtils.getUpdatesService(getApplicationContext());
 		return seriesNuevas;
 	}
 	
