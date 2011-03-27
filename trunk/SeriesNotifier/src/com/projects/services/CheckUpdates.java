@@ -1,59 +1,94 @@
 package com.projects.services;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import com.projects.series.Serie;
-import com.projects.seriesnotifier.NewEpisodes;
-import com.projects.seriesnotifier.Notifier;
-import com.projects.seriesnotifier.R;
-import com.projects.utils.SeriesUtils;
-
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
 
-public class CheckUpdates extends IntentService {
+import com.projects.series.Serie;
+import com.projects.seriesnotifier.Notifier;
+import com.projects.seriesnotifier.R;
+import com.projects.utils.SeriesUtils;
+
+public class CheckUpdates extends Service {
 
 	final int NOTIFICATION_ID = 1;
 	
-	public CheckUpdates() {
-		super("");
-		// TODO Auto-generated constructor stub
-	}
-
+	// This is the object that receives interactions from clients.  See
+    // RemoteService for a more complete example.
+    private final IBinder mBinder = new MyBinder();
+    
+    List<Serie> seriesNuevas;
+	
 	@Override
-	public void onHandleIntent(Intent intent) {
-		handleCommand(intent);
+	public void onCreate() {
+		
 	}
 	
-	public void handleCommand(Intent intent){
-		//showToast("Servicio Iniciado");
-		List<Serie> seriesNuevas = checkUpdates();
+	@Override
+	public void onStart(Intent intent, int startId){
+		handleCommand();
+	}
+	
+	@Override
+	public IBinder onBind(Intent intent) {
+		return mBinder;
+		
+	}
+	
+	@Override
+	public void onDestroy() {
+		
+	}
+	
+	private class MyBinder extends Binder {
+		
+	}
+	
+	public void handleCommand(){
+		new Timer().scheduleAtFixedRate(checkUpdates, 0, 1000*10);
+		/*List<Serie> seriesNuevas = checkUpdates();
 		if(seriesNuevas != null && seriesNuevas.size() > 0) {
 			createNotification("(" + seriesNuevas.size() + ")");
-		}
+		}*/
 	}
 	
-	public void showToast(String message){
+	private TimerTask checkUpdates = new TimerTask() 
+    { 
+        public void run()  
+        { 
+        	showToast("Servicio Iniciado");
+            seriesNuevas = SeriesUtils.getUpdatesService(getApplicationContext());
+            if(seriesNuevas != null && seriesNuevas.size() > 0) {
+    			createNotification("(" + seriesNuevas.size() + ")");
+    		}
+        } 
+    }; 
+	
+	
+	private void showToast(String message){
 		Context context = getApplicationContext();
 		int duration = Toast.LENGTH_SHORT;
 		Toast toast = Toast.makeText(context, message, duration);
 		toast.show();
 	}
 	
-	public List<Serie> checkUpdates(){
+	private List<Serie> checkUpdates(){
 		List<Serie> seriesNuevas = SeriesUtils.getUpdatesService(getApplicationContext());
 		return seriesNuevas;
 	}
 	
-	public void createNotification(CharSequence desc){
+	private void createNotification(CharSequence desc){
 		// Create the Notification Manager in the Notification Context
 	    String ns = Context.NOTIFICATION_SERVICE;
 	    NotificationManager notMan = (NotificationManager) getSystemService(ns);
