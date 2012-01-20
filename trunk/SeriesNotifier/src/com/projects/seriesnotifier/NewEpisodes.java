@@ -3,6 +3,7 @@ package com.projects.seriesnotifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.projects.series.Episode;
 import com.projects.series.Serie;
 import com.projects.utils.SeriesUtils;
 
@@ -26,7 +27,7 @@ public class NewEpisodes extends Activity{
 		ListView list = (ListView)findViewById(R.id.new_episode_list);		
 		final ArrayList<String> array = new ArrayList<String>();
         
-        final ArrayAdapter<String> aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
+        final ArrayAdapter<String> aa = new ArrayAdapter<String>(this, R.layout.list_item, array);
 	    
         list.setAdapter(aa);
 			
@@ -34,14 +35,15 @@ public class NewEpisodes extends Activity{
 	    NotificationManager notMan = (NotificationManager) getSystemService(ns);
 	    notMan.cancel(NOTIFICATION_ID);
 	    
-	    List<Serie> series = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
+	    List<Episode> episodes = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
 	    
-		for (Serie serie : series) {
-	    	array.add(0, serie.getName());
+		for (Episode episode : episodes) {
+			System.out.println("Id episodio" + episode.getId());
+	    	array.add(0, episode.getSerieName() + " " + episode.getSeason() + "x" + episode.getEpisode() + "\n " + episode.getDate());
 			aa.notifyDataSetChanged();
 		}
 	    
-	    SeriesUtils.updateDBSeriesUpdates(getApplicationContext());
+	    //SeriesUtils.updateDBSeriesUpdates(getApplicationContext());
 
 	}
 

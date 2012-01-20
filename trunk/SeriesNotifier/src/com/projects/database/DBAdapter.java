@@ -23,6 +23,18 @@ public class DBAdapter {
 	// The name and column index of each column in your database.
 	public static final String KEY_NAME="name";
 	
+	public static final String KEY_EPISODEID="serieid";
+	
+	public static final String KEY_SERIEID="serieid";
+	
+	public static final String KEY_SERIENAME="seriename";
+	
+	public static final String KEY_SEASON="season";
+	
+	public static final String KEY_EPISODE="episode";
+	
+	public static final String KEY_DATE="date";
+	
 	public static final String KEY_VISTO="visto";
 	
 	public static final String KEY_EPOCH="epoch";
@@ -33,8 +45,15 @@ public class DBAdapter {
 
 	private static final String CREATE_TABLE_SERIES = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_SERIES + " (" + KEY_ID + " integer primary key autoincrement, "
 			+ KEY_NAME + " text not null unique);";
-	private static final String CREATE_TABLE_UPDATES = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_SERIES_UPDATES + " (" + KEY_ID + " integer primary key autoincrement, "
-	+ KEY_NAME + " text not null, " + KEY_VISTO + " BOOLEAN);";
+	private static final String CREATE_TABLE_UPDATES = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_SERIES_UPDATES + " (" + 
+							KEY_ID + " integer primary key autoincrement, " +
+							KEY_EPISODEID + " integer UNIQUE" + 
+							KEY_SERIEID + " integer not null, " +
+							KEY_SERIENAME + " text not null, " +
+							KEY_SEASON + " text not null, " +
+							KEY_EPISODE + " text not null, " +
+							KEY_DATE + " text not null, " +
+							"" + KEY_VISTO + " BOOLEAN);";
 	
 	private static final String CREATE_TABLE_EPOCH = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_EPOCH_DATE + " (" + KEY_ID + " text primary key, "
 	+ KEY_EPOCH + " BIGINT not null);";
@@ -65,20 +84,29 @@ public class DBAdapter {
 		return db.insert(DATABASE_TABLE_SERIES, null, initialValues);
 	}
 	
-	public long insertSerieUpdate(String serie, int id) {
+	public long insertSerieUpdate(int id, int serieid, String seriename, String season, String episode, String date) {
 		long ret = 0;
 		ContentValues initialValues = new ContentValues();
 		Cursor series = getSeriesUpdates(id);
+		System.out.println("Introducimos la serie con id" + id);
 		if (series.getCount()>0) {
 			series.moveToFirst();
 			series.moveToPosition(0);
-			initialValues.put(KEY_NAME, series.getString(1));
 			initialValues.put(KEY_ID, series.getString(0));
+			initialValues.put(KEY_SERIEID, series.getString(1));
+			initialValues.put(KEY_SERIENAME, series.getString(2));
+			initialValues.put(KEY_SEASON, series.getString(3));
+			initialValues.put(KEY_EPISODE, series.getString(4));
+			initialValues.put(KEY_DATE, series.getString(5));
 			initialValues.put(KEY_VISTO, 0);
 			ret = db.update(DATABASE_TABLE_SERIES_UPDATES, initialValues, KEY_ID + " = " + series.getString(0), null);
 		} else {
-			initialValues.put(KEY_NAME, serie);
 			initialValues.put(KEY_ID, id);
+			initialValues.put(KEY_SERIEID, serieid);
+			initialValues.put(KEY_SERIENAME, seriename);
+			initialValues.put(KEY_SEASON, season);
+			initialValues.put(KEY_EPISODE, episode);
+			initialValues.put(KEY_DATE, date);
 			initialValues.put(KEY_VISTO, 0);
 			ret = db.insert(DATABASE_TABLE_SERIES_UPDATES, null, initialValues);
 			
@@ -122,11 +150,7 @@ public class DBAdapter {
 		return db.delete(DATABASE_TABLE_SERIES, KEY_NAME+" = '"+serie+"'", null);
 	}
 	
-	public long deleteSerieUpdate(String serie)
-	{
-		return db.delete(DATABASE_TABLE_SERIES_UPDATES, KEY_NAME+" = '"+serie+"'", null);
-	}
-	
+		
 	public long deleteSerie(int id)
 	{
 		return db.delete(DATABASE_TABLE_SERIES, KEY_ID+" = '"+id+"'", null);
@@ -143,13 +167,13 @@ public class DBAdapter {
 	}
 	
 	public Cursor getSeriesUpdates() {
-		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_NAME },
-				KEY_VISTO + "= 0", null, null, null, KEY_NAME);
+		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_SERIEID, KEY_SERIENAME, KEY_SEASON, KEY_EPISODE, KEY_DATE },
+				KEY_VISTO + "= 0", null, null, null, KEY_DATE);
 	}
 	
 	public Cursor getSeriesUpdates(int id) {
-		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_NAME },
-				KEY_ID + " = " + id, null, null, null, KEY_NAME);
+		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_SERIEID, KEY_SERIENAME, KEY_SEASON, KEY_EPISODE, KEY_DATE },
+				KEY_ID + " = " + id, null, null, null, KEY_DATE);
 	}
 	
 	public Cursor getEpochDate() {

@@ -22,10 +22,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.projects.database.DBAdapter;
+import com.projects.series.Episode;
 import com.projects.series.Serie;
 import com.projects.seriesnotifier.R;
 
@@ -372,30 +374,35 @@ public class SeriesUtils {
 		return series;		  
 	}
 	
-	public static List<Serie> getDBSeriesUpdates(Context context)
+	public static List<Episode> getDBSeriesUpdates(Context context)
 	{
 		DBAdapter db = new DBAdapter(context);
 		int cols = 0;
 		db.open();
-		Serie serie = new Serie();
-		List<Serie> series = new ArrayList<Serie>();
+		Episode episode = new Episode();
+		List<Episode> episodes = new ArrayList<Episode>();
   
 		Cursor cursor = db.getSeriesUpdates();
 		cursor.moveToFirst();
 		cols = cursor.getCount();
 		if(cols > 0){
-			for(int i = 0; i < cursor.getCount(); i++)
+			for(int i = 0; i < cols; i++)
 			{
-				cursor.moveToPosition(i);
-				serie = new Serie();
-				serie.setId(cursor.getString(0));
-				serie.setName(cursor.getString(1));
-				series.add(serie);
+				episode = new Episode();
+				System.out.println("Posicion en la table: " + cursor.getPosition() + "ID: " + cursor.getString(cursor.getColumnIndex("_id")));
+				episode.setId(cursor.getString(cursor.getColumnIndex("_id")));
+				episode.setSerieId(cursor.getString(1));
+				episode.setSerieName(cursor.getString(2));
+				episode.setSeason(cursor.getString(3));
+				episode.setEpisode(cursor.getString(4));
+				episode.setDate(cursor.getString(5));
+				episodes.add(episode);
+				cursor.moveToNext();
 			}
 		}
-  
+		
 		db.close();
-		return series;		  
+		return episodes;		  
 	}
 	
 	public static long addDBSerie(String serie, int id, Context context){
@@ -407,11 +414,11 @@ public class SeriesUtils {
 		return ret;
 	}
 	
-	public static long addDBSerieUpdates(String serie, int id, Context context){
+	public static long addDBSerieUpdates(Episode ep, Context context){
 		DBAdapter db = new DBAdapter(context);
 		long ret = 0;
 		db.open();
-		ret =  db.insertSerieUpdate(serie, id);
+		ret =  db.insertSerieUpdate(Integer.parseInt(ep.getId()), Integer.parseInt(ep.getSerieId()), ep.getSerieName(), ep.getSeason(), ep.getEpisode(), ep.getDate());
 		db.close();
 		return ret;
 	}
@@ -656,7 +663,7 @@ public class SeriesUtils {
 		Serie serie;
 		List<Serie> seriesNuevas = new ArrayList<Serie>();
 		String site = context.getString(R.string.getUpdates);
-		String paramName = context.getString(R.string.getUpdatesParam);
+		String paramTimeName = context.getString(R.string.getUpdatesTimeParam);
 		
 		long epoch = DateUtils.getEpochDate(context);
 		if (epoch == -1) {
@@ -667,7 +674,7 @@ public class SeriesUtils {
 		try 
 		{
 			
-			url = new URL(site+"?"+paramName+"="+URLEncoder.encode( epochString ));
+			url = new URL(site+"?"+paramTimeName+"="+URLEncoder.encode( epochString ));
 			URLConnection connection;
 			connection = url.openConnection();
 			HttpURLConnection httpConnection = (HttpURLConnection)connection;
@@ -717,13 +724,15 @@ public class SeriesUtils {
 		return filterByOwnSeries(context, seriesNuevas);
 	}
 	
-	public static List<Serie> getUpdatesService(Context context)
+	public static List<Episode> getUpdatesService(Context context)
 	{
 		URL url;
-		Serie serie;
-		List<Serie> seriesNuevas = new ArrayList<Serie>();
+		Episode ep;
+		List<Episode> episodesNuevos = new ArrayList<Episode>();
+		List<Serie>	seriesDB = new ArrayList<Serie>();
 		String site = context.getString(R.string.getUpdatesService);
-		String paramName = context.getString(R.string.getUpdatesParam);
+		String paramTimeName = context.getString(R.string.getUpdatesTimeParam);
+		String generateSeriesRequestString = "";
 		
 		long epoch = DateUtils.getEpochDate(context);
 		if (epoch == -1) {
@@ -731,10 +740,13 @@ public class SeriesUtils {
 		}
 		
 		String epochString = String.valueOf(epoch);
+		System.out.println("Obtenemos las actualizaciones de series desde el servicio");
 		try 
 		{
-			
-			url = new URL(site+"?"+paramName+"="+URLEncoder.encode( epochString ));
+			seriesDB = getDBSeries(context);
+			generateSeriesRequestString = generateSeriesRequestString(seriesDB);
+			url = new URL(site+"&"+paramTimeName+"="+URLEncoder.encode( epochString )+"&series="+generateSeriesRequestString);
+			System.out.println("URL: " + url);
 			URLConnection connection;
 			connection = url.openConnection();
 			HttpURLConnection httpConnection = (HttpURLConnection)connection;
@@ -749,21 +761,33 @@ public class SeriesUtils {
 				Document dom = db.parse(in);
 				Element docEle = dom.getDocumentElement();
 				// 
-				NodeList nl = docEle.getElementsByTagName("serie");
+				NodeList nl = docEle.getElementsByTagName("episode");
 				if (nl != null && nl.getLength() > 0) {
 					for (int i = 0 ; i < nl.getLength(); i++) {
-						Element SerieId = (Element)nl.item(i);
+						Element episode = (Element)nl.item(i);
+						Node id = episode.getChildNodes().item(0);
+						Node serieid = episode.getChildNodes().item(2);
+						Node seriename = episode.getChildNodes().item(1);
+						Node seasonNumber = episode.getChildNodes().item(3);
+						Node episodeNumber = episode.getChildNodes().item(4);
+						Node date = episode.getChildNodes().item(5);
 						//String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
 						//if(ended.equals("0")){
-							serie = new Serie();
-							serie.setId(SerieId.getFirstChild().getNodeValue());
-							seriesNuevas.add(serie);
+							ep = new Episode();
+							ep.setId(id.getFirstChild().getNodeValue());
+							ep.setSerieId(serieid.getFirstChild().getNodeValue());
+							ep.setSerieName(seriename.getFirstChild().getNodeValue());
+							ep.setSeason(seasonNumber.getFirstChild().getNodeValue());
+							ep.setEpisode(episodeNumber.getFirstChild().getNodeValue());
+							ep.setDate(date.getFirstChild().getNodeValue());
+							episodesNuevos.add(ep);
+							addDBSerieUpdates(ep, context);
 						//}
 						
 					}
-				}								
+				}
 				
-			}
+			} 
 			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -778,10 +802,25 @@ public class SeriesUtils {
 		catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		DateUtils.insertEpochDate(context, (System.currentTimeMillis()/1000));
-		return filterByOwnSeries(context, seriesNuevas);
+		return episodesNuevos;
+		//return filterByOwnSeries(context, seriesNuevas);
+	}
+	
+	private static String generateSeriesRequestString(List<Serie> series)
+	{
+		String seriesRequestString = "";
+		for(int i = 0; i < series.size(); i++){
+			seriesRequestString += series.get(i).getId();
+			if(i != series.size()-1) {
+				seriesRequestString += ",";
+			} 
+		}
+		return seriesRequestString;
 	}
 	
 	public static List<Serie> filterByOwnSeries(Context context, List<Serie> updatesSeries)
@@ -793,7 +832,7 @@ public class SeriesUtils {
 			for (Serie mySerie : mySeries) {
 				if(serie.getId().equals(mySerie.getId())){
 					myUpdatesSeries.add(serie);
-					addDBSerieUpdates(mySerie.getName(), Integer.parseInt(mySerie.getId()), context);
+					//addDBSerieUpdates(mySerie.getName(), Integer.parseInt(mySerie.getId()), context);
 				}
 			}
 		}
