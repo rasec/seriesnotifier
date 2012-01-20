@@ -20,6 +20,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.projects.series.Episode;
 import com.projects.series.Serie;
 import com.projects.seriesnotifier.Notifier;
 import com.projects.seriesnotifier.R;
@@ -44,7 +45,7 @@ public class CheckUpdates extends Service {
     // RemoteService for a more complete example.
     private final IBinder mBinder = new MyBinder();
     
-    List<Serie> seriesNuevas;
+    List<Episode> episodiosNuevos;
 	
 	@Override
 	public void onCreate() {
@@ -100,7 +101,7 @@ public class CheckUpdates extends Service {
 	}
 	
 	private void getPreferencesData() {
-		days = new Integer( checkForUpdatesFrecuence.getInt("checkForUpdatesFrecuence", 0) );
+		days = new Integer( checkForUpdatesFrecuence.getInt("checkForUpdatesFrecuence", 1) );
 		hour = new Integer( checkForUpdatesHour.getInt("checkForUpdatesHour", 20) );
 		Date now = new Date();
 		DiferentTimes dT = new DiferentTimes(now, hour);
@@ -111,9 +112,10 @@ public class CheckUpdates extends Service {
     { 
         public void run()  
         { 
-        	seriesNuevas = SeriesUtils.getUpdatesService(getApplicationContext());
-            if(seriesNuevas != null && seriesNuevas.size() > 0) {
-    			createNotification("(" + seriesNuevas.size() + ")");
+        	System.out.println("Lanzamos el UpdateChecker");
+        	episodiosNuevos = SeriesUtils.getUpdatesService(getApplicationContext());
+            if(episodiosNuevos != null && episodiosNuevos.size() > 0) {
+    			createNotification("(" + episodiosNuevos.size() + ")");
     		} else {
     			createNotification("No hay capítulos nuevos");
     		}
@@ -127,12 +129,13 @@ public class CheckUpdates extends Service {
 		toast.show();
 	}
 	
-	private List<Serie> checkUpdates(){
-		List<Serie> seriesNuevas = SeriesUtils.getUpdatesService(getApplicationContext());
-		return seriesNuevas;
+	private List<Episode> checkUpdates(){
+		List<Episode> episodiosNuevos = SeriesUtils.getUpdatesService(getApplicationContext());
+		return episodiosNuevos;
 	}
 	
 	private void createNotification(CharSequence desc){
+		System.out.println("Creamos la notificacion: " + desc);
 		// Create the Notification Manager in the Notification Context
 	    String ns = Context.NOTIFICATION_SERVICE;
 	    NotificationManager notMan = (NotificationManager) getSystemService(ns);
