@@ -5,46 +5,189 @@ import java.util.List;
 
 import com.projects.series.Episode;
 import com.projects.series.Serie;
+import com.projects.seriesnotifier.OwnSeries.CommandDeleteSerie;
+import com.projects.seriesnotifier.OwnSeries.IconListViewAdapterDelete;
 import com.projects.utils.SeriesUtils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class NewEpisodes extends Activity{
+public class NewEpisodes extends ListActivity{
 	
 	final int NOTIFICATION_ID = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-				
-		setContentView(R.layout.new_episodes);
 		
-		ListView list = (ListView)findViewById(R.id.new_episode_list);		
-		final ArrayList<String> array = new ArrayList<String>();
-        
-        final ArrayAdapter<String> aa = new ArrayAdapter<String>(this, R.layout.list_item, array);
-	    
-        list.setAdapter(aa);
-			
 		String ns = Context.NOTIFICATION_SERVICE;
 	    NotificationManager notMan = (NotificationManager) getSystemService(ns);
 	    notMan.cancel(NOTIFICATION_ID);
 	    
 	    List<Episode> episodes = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
 	    
-		for (Episode episode : episodes) {
-			System.out.println("Id episodio" + episode.getId());
-	    	array.add(0, episode.getSerieName() + " " + episode.getSeason() + "x" + episode.getEpisode() + "\n " + episode.getDate());
-			aa.notifyDataSetChanged();
-		}
-	    
-	    //SeriesUtils.updateDBSeriesUpdates(getApplicationContext());
+	    setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.checked));
+	}
+	
+	public void showConfirmDialog(CharSequence episodeName, int id){
+    	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+    	dialog.setMessage(getString(R.string.askToDeleteEpisode) + episodeName)
+    	.setPositiveButton(getString(R.string.Ok), new CommandUpdateEpisode(episodeName, id))
+    	.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	                dialog.dismiss();
+	           }
+	       });
+    	AlertDialog alert = dialog.create();
+    	alert.show();
+    }
+	
+	private void deleteElement(CharSequence name, int id) {
+		String message = "";
 
+		int ret = (int)SeriesUtils.updateDBSeriesUpdates(getApplicationContext(), id);
+
+		List<Episode> episodes = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
+		List<String> episodeString = new ArrayList<String>();
+		for (Episode e : episodes) {
+			episodeString.add(e.getSerieName() + " " + e.getSeason() +"x"+ e.getEpisode());			
+		}
+		setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.checked));
+		
+		if(ret >= 0)
+	 		message = getString(R.string.delEpisode) + name;
+	 	else if(ret == -1)
+	 		message = getString(R.string.delSerieNotExists) + name;
+	 	showToast(message);
+	}
+	
+	public void showToast(String message){
+		Context context = getApplicationContext();
+		int duration = Toast.LENGTH_SHORT;
+		Toast toast = Toast.makeText(context, message, duration);
+		toast.show();
+	}
+	
+	/**
+	 * Clase interna que se encarga de hacer de adaptador especial para 
+	 * el formato de los listados de series, agregando el layout necesario
+	 * y poblando la lista
+	 * 
+	 * @author César de la Cruz Rueda (cesarcruz85 [at] gmail.com)
+	 *
+	 */
+	private class NewEpisodesAdapter extends BaseAdapter {
+		private Context mContext;
+		int count;
+		int icon;
+		private List<Episode> items;
+
+		public NewEpisodesAdapter(Context mContext, List<Episode> items, int icon) {
+			this.mContext = mContext;
+			this.items = items;
+			this.icon = icon;
+			this.count = items.size();
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			View v = convertView;
+			if (v == null) {
+				LayoutInflater vi = (LayoutInflater) mContext
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				v = vi.inflate(R.layout.new_episodes, null);
+			}
+			String serieName = items.get(position).getSerieName();
+			String episodeNum = items.get(position).getSeason() + "x" + items.get(position).getEpisode();
+			String date = items.get(position).getDate();
+			String id = items.get(position).getId();
+
+			// poblamos la lista de elementos
+
+			TextView tt = (TextView) v.findViewById(R.id.SerieName);
+			TextView tEpisodeNum = (TextView) v.findViewById(R.id.EpisodeNum);
+			TextView tdate = (TextView) v.findViewById(R.id.Date);
+			ImageView im = (ImageView) v.findViewById(R.id.listIcon);
+
+			//TODO: updateDBSeriesUpdates
+			//im.setOnClickListener(addSerie);
+
+			if (im != null) {
+				im.setImageResource(this.icon);
+			}
+			
+			im.setOnClickListener(updateEpisode);
+			
+			if (tt != null) {
+				tt.setText(serieName);
+				tt.setTag(id);
+			}
+			if(tEpisodeNum!=null) {
+				tEpisodeNum.setText(episodeNum);
+			}
+			if(tdate!=null) {
+				tdate.setText(getString(R.string.date) + " " +  date);
+			}
+
+			return v;
+		}
+
+		public int getCount() {
+			return count;
+		}
+
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		
+		public OnClickListener updateEpisode = new OnClickListener() {
+			public void onClick(View v) {
+				// do something when the button is clicked
+				String serieName = ((TextView)((RelativeLayout)((LinearLayout) v.getParent()).getChildAt(1)).getChildAt(0)).getText().toString();
+				String episode = ((TextView)((RelativeLayout)((LinearLayout) v.getParent()).getChildAt(1)).getChildAt(1)).getText().toString();
+				int id = Integer.parseInt(((String)((TextView)((RelativeLayout)((LinearLayout) v.getParent()).getChildAt(1)).getChildAt(0)).getTag()));
+				showConfirmDialog(serieName + " " + episode, id);
+			}
+		};
+	}
+	
+	public class CommandUpdateEpisode implements DialogInterface.OnClickListener {
+		
+		  private CharSequence episodeName;
+		  private int id;
+		  public CommandUpdateEpisode(CharSequence episodeName, int id) {
+			  this.id = id;
+			  this.episodeName = episodeName;
+		
+		  }
+		  
+		  public void onClick(DialogInterface dialog, int which) {
+			dialog.dismiss();
+			deleteElement(this.episodeName, this.id);		
+		  }		
 	}
 
 }

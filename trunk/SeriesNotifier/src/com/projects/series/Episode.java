@@ -7,6 +7,7 @@ public class Episode {
 	private String season;
 	private String episode;
 	private String date;
+	private boolean alreadyShowed = false;
 	
 	public Episode()
 	{
@@ -69,6 +70,14 @@ public class Episode {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+	
+	public boolean isAlreadyShowed() {
+		return this.alreadyShowed;
+	}
+
+	public void markAsShowed() {
+		this.alreadyShowed = true;
 	}
 
 }

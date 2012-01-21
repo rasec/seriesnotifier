@@ -1,20 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+		android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        style="@style/Tabs" >
+    
+    <ImageView
+		android:id="@+id/listIcon"
+		android:layout_width="wrap_content"
+    	android:layout_height="fill_parent"
+		style="@style/LeftIcon"
+		android:src="@drawable/checked"
+		android:layout_gravity="center_vertical" />
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+			<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+id/SerieName"
+				android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	style="@style/SerieName" >
+		    </TextView>
+		    
+		    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+id/EpisodeNum"
+				android:layout_toRightOf="@id/SerieName"
+				android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	style="@style/EpisodeNum" >
+		    </TextView>
+		
+		   <!--  <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+id/EpisodeName"
+				android:layout_below="@id/SerieName"
+				android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	style="@style/EpisodeName" >
+		    </TextView>
+		    --> 
+		    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+id/Date"
+				android:layout_below="@id/SerieName"
+				android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	style="@style/Date" >
+		    </TextView>
+		</RelativeLayout>
 	
-	<!-- <TextView 
-		android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content"
-	    style="@style/TextNormal"
-	    android:text="@string/newEpisdeProv" >
-	</TextView>
-	 -->
-	<ListView
-    	android:id="@+id/new_episode_list"
-    	android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		style="@style/ListItem"
-		/>
-	</LinearLayout>
+    
+</LinearLayout>
