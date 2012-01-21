@@ -81,23 +81,9 @@ public class CheckUpdates extends Service {
 		if(!serviceActive) {
 			getPreferencesData();
 			timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
-			//timer.scheduleAtFixedRate(checkUpdates, 0, 1000*30);
+			//timer.scheduleAtFixedRate(checkUpdates, 1000*60, 1000*60*10);
 			serviceActive = true;
 		} 
-		/*listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-		  public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-		    // Implementation
-			getPreferencesData();
-			timer.cancel();
-			timer.purge();
-			timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
-			//timer.scheduleAtFixedRate(checkUpdates, 0, 1000*30);
-			serviceActive = true;
-		  }
-		};
-		checkForUpdatesFrecuence.registerOnSharedPreferenceChangeListener(listener);
-		checkForUpdatesHour.registerOnSharedPreferenceChangeListener(listener);*/
-		
 	}
 	
 	private void getPreferencesData() {

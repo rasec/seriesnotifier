@@ -396,6 +396,7 @@ public class SeriesUtils {
 				episode.setSeason(cursor.getString(3));
 				episode.setEpisode(cursor.getString(4));
 				episode.setDate(cursor.getString(5));
+				if(cursor.getInt(6) == 1) episode.markAsShowed();
 				episodes.add(episode);
 				cursor.moveToNext();
 			}
@@ -450,14 +451,16 @@ public class SeriesUtils {
 	}
 	
 	
-	public static void updateDBSeriesUpdates(Context context)
+	public static int updateDBSeriesUpdates(Context context, int id)
 	{
 		DBAdapter db = new DBAdapter(context);
+		int ret;
 		db.open();
+		
+		ret = db.updateSeriesUpdates(id);
   
-		db.updateSeriesUpdates();
-  
-		db.close();		  
+		db.close();
+		return ret;
 	}
 	
 	/* METODOS PARA EL ACCESO A THETVDB */

@@ -167,13 +167,13 @@ public class DBAdapter {
 	}
 	
 	public Cursor getSeriesUpdates() {
-		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_SERIEID, KEY_SERIENAME, KEY_SEASON, KEY_EPISODE, KEY_DATE },
-				KEY_VISTO + "= 0", null, null, null, KEY_DATE);
+		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_SERIEID, KEY_SERIENAME, KEY_SEASON, KEY_EPISODE, "strftime('%d/%m/%Y',"+ KEY_DATE+")", KEY_VISTO },
+				KEY_VISTO +" = 0", null, null, null, "date desc");
 	}
 	
 	public Cursor getSeriesUpdates(int id) {
 		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_SERIEID, KEY_SERIENAME, KEY_SEASON, KEY_EPISODE, KEY_DATE },
-				KEY_ID + " = " + id, null, null, null, KEY_DATE);
+				KEY_ID + " = " + id, null, null, null, null);
 	}
 	
 	public Cursor getEpochDate() {
@@ -181,10 +181,10 @@ public class DBAdapter {
 				null, null, null, null, KEY_EPOCH);
 	}
 	
-	public int updateSeriesUpdates() {
+	public int updateSeriesUpdates(int id) {
 		ContentValues updatesValues = new ContentValues();
 		updatesValues.put(KEY_VISTO, 1);
-		return db.update(DATABASE_TABLE_SERIES_UPDATES, updatesValues, null, null);
+		return db.update(DATABASE_TABLE_SERIES_UPDATES, updatesValues, KEY_ID + " = " + id, null);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {

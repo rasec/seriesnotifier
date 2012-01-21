@@ -71,6 +71,11 @@
     
     <string name="days">Días</string>
     <string name="hours">Horas</string>
+    
+    <string name="delEpisode">Episodio eliminado correctamente: </string>
+    <string name="askToDeleteEpisode">¿Desea marcar como leído el episodio: </string>
+    
+    <string name="date">Emitido el</string>
         
 </resources>
 
