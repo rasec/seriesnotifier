@@ -10,6 +10,7 @@ public class Serie {
 	private String desc;
 	private String imgUrl;
 	private String estado;
+	private boolean fav;
 	
 	public Serie()
 	{
@@ -88,6 +89,16 @@ public class Serie {
 		}else{
 			this.estado = estado;
 		}
+	}
+	
+	public boolean isFav()
+	{
+		return this.fav;
+	}
+	
+	public void setFav(boolean fav)
+	{
+		this.fav = fav;
 	}
 
 }

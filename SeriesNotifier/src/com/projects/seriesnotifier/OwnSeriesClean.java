@@ -88,7 +88,7 @@ public class OwnSeriesClean extends ListActivity {
 
 		if (series != null) {
 			//la = new IconListViewAdapterDelete(this, R.layout.list_item_icon, seriesString, series, R.drawable.remove);
-			la = new IconListAdapter(this, series, R.drawable.remove);
+			la = new IconListAdapter(this, series, R.drawable.favorite);
 			setListAdapter(la);
 
 			lv = getListView();
@@ -121,10 +121,10 @@ public class OwnSeriesClean extends ListActivity {
 		}
 
 		if (series != null) {
-			this.la = new IconListAdapter(this, series, R.drawable.remove);
+			this.la = new IconListAdapter(this, series, R.drawable.favorite);
 			setListAdapter(this.la);
 		} else {
-			this.la = new IconListAdapter(this, series, R.drawable.remove);
+			this.la = new IconListAdapter(this, series, R.drawable.favorite);
 			setListAdapter(this.la);
 		}
 		if (ret >= 0) {

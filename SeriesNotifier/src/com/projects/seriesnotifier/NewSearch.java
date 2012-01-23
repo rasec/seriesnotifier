@@ -245,7 +245,8 @@ public class NewSearch extends ListActivity {
 			}
 			String text = items.get(position).getName();
 			String id = items.get(position).getId();
-
+			boolean fav = items.get(position).isFav();
+			
 			// poblamos la lista de elementos
 
 			TextView tt = (TextView) v.findViewById(R.id.listText);
@@ -254,7 +255,11 @@ public class NewSearch extends ListActivity {
 			im.setOnClickListener(addSerie);
 
 			if (im != null) {
-				im.setImageResource(this.icon);
+				if(fav) {
+					im.setImageResource(R.drawable.favorite);
+				} else {
+					im.setImageResource(this.icon);
+				}
 			}
 			if (tt != null) {
 				tt.setText(text);
@@ -294,7 +299,7 @@ public class NewSearch extends ListActivity {
 		if (!series.isEmpty()) {
 			setListAdapter(new IconListViewAdapterAdd(getApplicationContext(),
 					R.layout.list_item_icon, seriesString, series,
-					R.drawable.add));
+					R.drawable.star_grey));
 			ListView lv = getListView();
 			lv.setTextFilterEnabled(true);
 	

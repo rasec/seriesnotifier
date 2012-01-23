@@ -176,7 +176,7 @@ public class NewSearchClean extends ListActivity {
 		setContentView(R.layout.list_serie_search);
 		if (!series.isEmpty()) {
 			setListAdapter(new IconListAdapter(getApplicationContext(),
-					series,	R.drawable.add));
+					series,	R.drawable.star_grey));
 			lv = getListView();
 			lv.setTextFilterEnabled(true);
 			registerForContextMenu(lv);

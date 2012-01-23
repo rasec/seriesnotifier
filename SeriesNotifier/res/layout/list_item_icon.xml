@@ -16,7 +16,7 @@
 		android:layout_width="wrap_content"
     	android:layout_height="fill_parent"
 		style="@style/ListIcon"
-		android:src="@drawable/add"
+		android:src="@drawable/star_grey"
 		android:layout_gravity="center_horizontal" />
 	
 </RelativeLayout>
