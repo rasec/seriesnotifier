@@ -133,7 +133,7 @@ public class DBAdapter {
 	}
 	
 	public boolean existsSerie(int id) {
-		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_NAME },
+		return db.query(DATABASE_TABLE_SERIES, new String[] { KEY_ID, KEY_NAME },
 				KEY_ID + " = " + id, null, null, null, KEY_ID).getCount() > 0 ? true : false;
 	}
 	
@@ -164,6 +164,11 @@ public class DBAdapter {
 	public Cursor getSeries() {
 		return db.query(DATABASE_TABLE_SERIES, new String[] { KEY_ID, KEY_NAME },
 				null, null, null, null, KEY_NAME);
+	}
+	
+	public Cursor getSeries(int id) {
+		return db.query(DATABASE_TABLE_SERIES, new String[] { KEY_ID, KEY_NAME },
+				KEY_ID + " = " + id, null, null, null, null);
 	}
 	
 	public Cursor getSeriesUpdates() {

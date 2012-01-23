@@ -274,6 +274,12 @@ public class SeriesUtils {
 		return exists;
 	}
 	
+	public static boolean serieAlreadyExists(int id, Context context)
+	{
+		System.out.println("Identificador a comprobar: " + id);
+		return serieAlreadyExistsDB(id, context);
+	}
+	
 	private static boolean serieExists(String serie, Context context) {
 		boolean exists = false;		
 		String[] list = null;
@@ -372,6 +378,18 @@ public class SeriesUtils {
   
 		db.close();
 		return series;		  
+	}
+	
+	private static boolean serieAlreadyExistsDB(int id, Context context)
+	{
+		boolean exists = false;
+		System.out.println("Contexto: " + context.toString());
+		DBAdapter db = new DBAdapter(context);
+		db.open();
+		System.out.println("Adapter: " + db);
+		exists = db.existsSerie(id);
+		db.close();
+		return exists;
 	}
 	
 	public static List<Episode> getDBSeriesUpdates(Context context)
@@ -560,6 +578,7 @@ public class SeriesUtils {
 							serie = new Serie();
 							serie.setName(SerieName.getFirstChild().getNodeValue());
 							serie.setId(SerieId.getFirstChild().getNodeValue());
+							serie.setFav(serieAlreadyExists(Integer.parseInt(serie.getId()), context));
 							ret.add(serie);
 						//}
 						

@@ -43,7 +43,7 @@ public class NewEpisodes extends ListActivity{
 	    
 	    List<Episode> episodes = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
 	    
-	    setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.checked));
+	    setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.check_40));
 	}
 	
 	public void showConfirmDialog(CharSequence episodeName, int id){
@@ -69,7 +69,7 @@ public class NewEpisodes extends ListActivity{
 		for (Episode e : episodes) {
 			episodeString.add(e.getSerieName() + " " + e.getSeason() +"x"+ e.getEpisode());			
 		}
-		setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.checked));
+		setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.check_40));
 		
 		if(ret >= 0)
 	 		message = getString(R.string.delEpisode) + name;

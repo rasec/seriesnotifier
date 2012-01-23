@@ -62,7 +62,7 @@ public class OwnSeries extends ListActivity {
 			seriesString.add(serie.getName());			
 		}
         if(series != null){
-        	setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon,seriesString, series, R.drawable.remove));
+        	setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon,seriesString, series, R.drawable.favorite));
         	
         
 	        ListView lv = getListView();
@@ -129,10 +129,10 @@ public class OwnSeries extends ListActivity {
 		}
 
 		if(series != null){
-			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, seriesString, series, R.drawable.remove));
+			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, seriesString, series, R.drawable.favorite));
 		}else{
 			List<String> empty = new ArrayList<String>();
-			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, empty, series, R.drawable.remove));
+			setListAdapter(new IconListViewAdapterDelete(this, R.layout.list_item_icon, empty, series, R.drawable.favorite));
 		}
 		if(ret >= 0)
 	 		message = getString(R.string.delSerie) + serie;

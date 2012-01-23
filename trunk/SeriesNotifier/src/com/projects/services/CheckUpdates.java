@@ -80,15 +80,16 @@ public class CheckUpdates extends Service {
 		
 		if(!serviceActive) {
 			getPreferencesData();
+			System.out.println(diference);
 			timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
-			//timer.scheduleAtFixedRate(checkUpdates, 1000*60, 1000*60*10);
+			//timer.scheduleAtFixedRate(checkUpdates, 1000*60*5, 1000*60*10);
 			serviceActive = true;
 		} 
 	}
 	
 	private void getPreferencesData() {
 		days = new Integer( checkForUpdatesFrecuence.getInt("checkForUpdatesFrecuence", 1) );
-		hour = new Integer( checkForUpdatesHour.getInt("checkForUpdatesHour", 20) );
+		hour = new Integer( checkForUpdatesHour.getInt("checkForUpdatesHour", 16) );
 		Date now = new Date();
 		DiferentTimes dT = new DiferentTimes(now, hour);
 		diference = dT.getDiference();
