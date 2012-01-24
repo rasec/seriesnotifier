@@ -31,7 +31,7 @@
 			android:layout_height="wrap_content"
 			android:layout_alignTop="@id/title"
 			style="@style/SerieInfoImage"
-			android:src="@drawable/remove" />
+			android:src="@drawable/favorite" />
 	    
 	    <TextView
 	        android:id="@+id/description"

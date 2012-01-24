@@ -63,21 +63,20 @@ public class SerieInfo extends Activity {
 	public OnClickListener serieAction = new OnClickListener() {
 		public void onClick(View v) {
 			// do something when the button is clicked
-			if(tipo==1)
-			{
-				showConfirmDialog(serie.getName(), Integer.parseInt(serie.getId()));
-			}else{
+			if(serie.isFav()){
 				showConfirmDialogDelete(serie);
-							
-			}
+	        } else {
+	        	showConfirmDialog(serie);
+	        }
 		}
 	};
 	
-	public void showConfirmDialog(String serie, int id) {
+	public void showConfirmDialog(Serie serie) {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		
 		dialog.setMessage(
-				getString(R.string.askToAddSerie) + serie)
-				.setPositiveButton(getString(R.string.Ok), new CommandAddSerie(serie, id))
+				getString(R.string.askToAddSerie) + serie.getName())
+				.setPositiveButton(getString(R.string.Ok), new CommandAddSerie(serie))
 				.setNegativeButton(getString(R.string.cancel),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
@@ -90,30 +89,31 @@ public class SerieInfo extends Activity {
 	
 	/* Inner class para el control de acciones en el dialog */
 	public class CommandAddSerie implements DialogInterface.OnClickListener {
-		private CharSequence serie;
-		private int id;
+		private Serie serie;
 
-		public CommandAddSerie(CharSequence serie, int id) {
+		public CommandAddSerie(Serie serie) {
 			this.serie = serie;
-			this.id = id;
 		}
 
 		public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
-			addSerie(serie, id);
+			addSerie(serie);
+			ImageView icon = (ImageView)findViewById(R.id.icon);
+			icon.setImageResource(R.drawable.favorite);
+			serie.setFav(true);
 		}
 	}
 	
-	public void addSerie(CharSequence serie, int id) {
+	public void addSerie(Serie serie) {
 		String toRet = "";
 		//int ret = SeriesUtils.addSerie(SeriesUtils.OWNSERIES, serie.toString(), getApplicationContext());
-		int ret = (int) SeriesUtils.addDBSerie(serie.toString(), id, getApplicationContext());
+		int ret = (int) SeriesUtils.addDBSerie(serie.getName(), Integer.parseInt(serie.getId()), getApplicationContext());
 		if (ret >= 0)
-			toRet = getString(R.string.addSuccess) + serie;
+			toRet = getString(R.string.addSuccess) + serie.getName();
 		else if (ret == -1)
-			toRet = getString(R.string.addAlreadyExists) + serie;
+			toRet = getString(R.string.addAlreadyExists) + serie.getName();
 		else if (ret == -2)
-			toRet = getString(R.string.addNotExists) + serie;
+			toRet = getString(R.string.addNotExists) + serie.getName();
 		showToast(toRet);
 	}
 	
@@ -132,7 +132,7 @@ public class SerieInfo extends Activity {
 	public void showConfirmDialogDelete(Serie serie){
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
     	dialog.setMessage(getString(R.string.askToDelete) + serie.getName())
-    	.setPositiveButton(getString(R.string.Ok), new CommandDeleteSerie(serie.getName()))
+    	.setPositiveButton(getString(R.string.Ok), new CommandDeleteSerie(serie))
     	.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 	           public void onClick(DialogInterface dialog, int id) {
 	                dialog.dismiss();
@@ -144,9 +144,9 @@ public class SerieInfo extends Activity {
 	
 	public class CommandDeleteSerie implements DialogInterface.OnClickListener {
 		
-		  private CharSequence serie;
+		  private Serie serie;
 		
-		  public CommandDeleteSerie(CharSequence serie) {
+		  public CommandDeleteSerie(Serie serie) {
 		
 		    this.serie = serie;
 		
@@ -154,19 +154,22 @@ public class SerieInfo extends Activity {
 		  
 		  public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
-			deleteElement(serie);		
+			deleteElement(serie);
+			ImageView icon = (ImageView)findViewById(R.id.icon);
+			icon.setImageResource(R.drawable.star_grey);
+			serie.setFav(false);
 		  }		
 	}
 	
-	private void deleteElement(CharSequence serie) {
+	private void deleteElement(Serie serie) {
 		String message = "";
 		//int ret = SeriesUtils.deleteSerie(SeriesUtils.OWNSERIES, text.toString(), this);
-		int ret = (int)SeriesUtils.deleteDBSerie(serie.toString(), getApplicationContext());
+		int ret = (int)SeriesUtils.deleteDBSerie(Integer.parseInt(serie.getId()), getApplicationContext());
 				
 		if(ret >= 0)
-	 		message = getString(R.string.delSerie) + serie;
+	 		message = getString(R.string.delSerie) + serie.getName();
 	 	else if(ret == -1)
-	 		message = getString(R.string.delSerieNotExists) + serie;
+	 		message = getString(R.string.delSerieNotExists) + serie.getName();
 		showToast(message);
 	}
 	
@@ -204,9 +207,10 @@ public class SerieInfo extends Activity {
         TextView stat = (TextView)findViewById(R.id.stat);
         
         
-        if(tipo == 1)
-        {
-        	icon.setImageResource(R.drawable.add);
+        if(serie.isFav()){
+        	icon.setImageResource(R.drawable.favorite);
+        } else {
+        	icon.setImageResource(R.drawable.star_grey);
         }
         
         

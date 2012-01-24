@@ -3,6 +3,7 @@
 	<style name="ListItem">
 		<item name="android:padding">5dp</item>
 		<item name="android:textSize">18sp</item>
+		<item name="android:width">260sp</item>
 	</style>
 	
 	<style name="LinearLayout">
@@ -34,7 +35,7 @@
 		<item name="android:layout_marginBottom">10dp</item>
 		<item name="android:textSize">20sp</item>
 		<item name="android:textStyle">bold</item>
-		
+		<item name="android:width">100sp</item>
 	</style>
 	
 	<style name="ButtonMargin">
