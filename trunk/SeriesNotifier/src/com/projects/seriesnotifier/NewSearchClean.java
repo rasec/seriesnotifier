@@ -128,11 +128,11 @@ public class NewSearchClean extends ListActivity {
 	 * @param serie, nombre de la serie para mostrar la info
 	 * 
 	 */
-	public void showConfirmDialog(int id, String serie) {
+	public void showConfirmDialog(int id, String serie,View v) {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 		dialog.setMessage(getString(R.string.askToAddSerie) + serie)
 				.setPositiveButton(getString(R.string.Ok),
-						new CommandAddSerie(serie, id)).setNegativeButton(
+						new CommandAddSerie(serie, id, v)).setNegativeButton(
 						getString(R.string.cancel),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
@@ -183,10 +183,7 @@ public class NewSearchClean extends ListActivity {
 	
 			lv.setOnItemClickListener(serieClick);
 			
-		} else {
-			Button bt = (Button)findViewById(R.id.ok_new);
-			bt.setOnClickListener(setNewSerie);
-		}
+		} 
 	}
 	
 	/*
@@ -290,8 +287,8 @@ public class NewSearchClean extends ListActivity {
 			int id = Integer
 					.parseInt((String) ((TextView) ((RelativeLayout) v
 							.getParent()).getChildAt(0)).getTag());
-
-			showConfirmDialog(id, serie);
+				
+			showConfirmDialog(id, serie, v);
 
 		}
 	};
@@ -312,15 +309,19 @@ public class NewSearchClean extends ListActivity {
 	private class CommandAddSerie implements DialogInterface.OnClickListener {
 		private CharSequence serie;
 		private int id;
+		private View v;
 
-		public CommandAddSerie(CharSequence serie, int id) {
+		public CommandAddSerie(CharSequence serie, int id, View v) {
 			this.serie = serie;
 			this.id = id;
+			this.v = v;
 		}
 
 		public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
 			addSerie(id, serie);
+			ImageView im = (ImageView) v.findViewById(R.id.listIcon);
+			im.setImageResource(R.drawable.favorite);
 		}
 	}
 	
@@ -355,17 +356,22 @@ public class NewSearchClean extends ListActivity {
 			}
 			String text = items.get(position).getName();
 			String id = items.get(position).getId();
-
+			Serie  serie = items.get(position);
 			// poblamos la lista de elementos
 
 			TextView tt = (TextView) v.findViewById(R.id.listText);
 			ImageView im = (ImageView) v.findViewById(R.id.listIcon);
 
 			im.setOnClickListener(addSerie);
-
 			if (im != null) {
-				im.setImageResource(this.icon);
+				if(serie.isFav())
+		        {
+					im.setImageResource(R.drawable.favorite);
+		        } else {
+		        	im.setImageResource(R.drawable.star_grey);
+		        }
 			}
+			
 			if (tt != null) {
 				tt.setText(text);
 				tt.setTag(id);

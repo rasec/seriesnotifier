@@ -61,7 +61,7 @@
     
     <string name="textInputSerieSearch">Buscar series:</string>
     <string name="textInputSerieAdd">Escriba el nombre de una serie para añadir:</string>
-    <string name="emptySerieSearch">No se han encontrado coincidencias, prueba a añadirla a la lista de series:</string>
+    <string name="emptySerieSearch">No se han encontrado coincidencias, prueba escribir el nombre completo de la serie</string>
     
     <string name="DescTitle"><u>Descripción</u></string>
     <string name="EstadoTitle"><u>Estado</u></string>

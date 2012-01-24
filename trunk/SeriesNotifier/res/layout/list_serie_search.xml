@@ -20,23 +20,6 @@
 	        android:layout_height="wrap_content"
 	        style="@style/TextNormal"	        
 	        android:text="@string/emptySerieSearch"/>
-        
-    	<EditText
-        android:id="@+id/entry_new"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"
-        style="@style/TextNormal"
-        android:layout_below="@id/label_new"        
-        />
-        
-    <Button
-        android:id="@+id/ok_new"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/entry_new"
-        style="@style/ButtonMargin"
-        android:text="@string/add" />
                		
 	</RelativeLayout>
  </LinearLayout>

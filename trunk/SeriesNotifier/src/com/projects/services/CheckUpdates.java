@@ -81,8 +81,8 @@ public class CheckUpdates extends Service {
 		if(!serviceActive) {
 			getPreferencesData();
 			System.out.println(diference);
-			timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
-			//timer.scheduleAtFixedRate(checkUpdates, 1000*60*5, 1000*60*10);
+			//timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
+			timer.scheduleAtFixedRate(checkUpdates, 1000*60*5, 1000*60*10);
 			serviceActive = true;
 		} 
 	}

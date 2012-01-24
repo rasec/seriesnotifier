@@ -654,6 +654,8 @@ public class SeriesUtils {
 							serie.setImgUrl(SerieImgUrl.getFirstChild().getNodeValue());
 							if(SerieState.getFirstChild()!=null)
 							serie.setEstado(SerieState.getFirstChild().getNodeValue(), context);
+							boolean exists = serieAlreadyExists(Integer.parseInt(serie.getId()), context);
+							serie.setFav(exists);	
 						//}
 						
 					}
