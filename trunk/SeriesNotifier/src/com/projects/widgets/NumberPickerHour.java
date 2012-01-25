@@ -62,7 +62,7 @@ public class NumberPickerHour extends LinearLayout {
 	private final int ELEMENT_WIDTH = ELEMENT_HEIGHT; // you're all squares, yo
 	
 	private final int MINIMUM = 0;
-	private final int MAXIMUM = 999;
+	private final int MAXIMUM = 23;
 	
 	public Integer value;
 	
@@ -157,7 +157,7 @@ public class NumberPickerHour extends LinearLayout {
 		
 		SharedPreferences customSharedPreference = getContext().getSharedPreferences("checkForUpdatesHour", Activity.MODE_PRIVATE);
 		
-		value = new Integer( customSharedPreference.getInt("checkForUpdatesHour", 0) );
+		value = new Integer( customSharedPreference.getInt("checkForUpdatesHour", 20) );
 		
 		valueText = new EditText( context );
 		valueText.setTextSize(25);

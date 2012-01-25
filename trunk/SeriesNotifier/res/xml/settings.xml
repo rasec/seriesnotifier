@@ -11,7 +11,7 @@
      		android:id="@+id/checkForUpdatesFrecuenceDialog"
             android:key="checkForUpdatesFrecuence"
             android:title="Frec. comprobaciones"
-            android:summary="Indique cada cuantos días prefier que se hagan las comprobaciones"
+            android:summary="Indique cada cuantos días prefiere que se hagan las comprobaciones"
             android:defaultValue="1"
             android:dialogLayout="@layout/number_picker_freq">
     </EditTextPreference>

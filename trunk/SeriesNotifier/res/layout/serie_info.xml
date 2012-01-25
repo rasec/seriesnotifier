@@ -19,7 +19,7 @@
 	    
 	    <TextView
 	        android:id="@+id/title"
-	        android:layout_width="fill_parent"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/banner"
 	        style="@style/Title"
@@ -43,7 +43,7 @@
 	        />
 		<TextView
 	        android:id="@+id/desc"
-	        android:layout_width="fill_parent"
+	        android:layout_width="wrap_content"
 	        android:layout_height="fill_parent"
 	        android:layout_below="@id/description"
 	        style="@style/TextDesc"

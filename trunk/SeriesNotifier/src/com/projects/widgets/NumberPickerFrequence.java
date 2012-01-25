@@ -64,8 +64,8 @@ public class NumberPickerFrequence extends LinearLayout {
 	private final int ELEMENT_HEIGHT = 50;
 	private final int ELEMENT_WIDTH = ELEMENT_HEIGHT; // you're all squares, yo
 	
-	private final int MINIMUM = 0;
-	private final int MAXIMUM = 999;
+	private final int MINIMUM = 1;
+	private final int MAXIMUM = 7;
 	
 	public Integer value;
 	
@@ -160,7 +160,7 @@ public class NumberPickerFrequence extends LinearLayout {
 		
 		SharedPreferences customSharedPreference = getContext().getSharedPreferences("checkForUpdatesFrecuence", Activity.MODE_PRIVATE);
 		
-		value = new Integer( customSharedPreference.getInt("checkForUpdatesFrecuence", 0) );
+		value = new Integer( customSharedPreference.getInt("checkForUpdatesFrecuence", 1) );
 		
 		valueText = new EditText( context );
 		valueText.setTextSize(25);

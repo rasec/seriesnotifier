@@ -35,7 +35,7 @@
 		<item name="android:layout_marginBottom">10dp</item>
 		<item name="android:textSize">20sp</item>
 		<item name="android:textStyle">bold</item>
-		<item name="android:width">100sp</item>
+		<item name="android:width">240sp</item>
 	</style>
 	
 	<style name="ButtonMargin">
@@ -59,6 +59,9 @@
 		<item name="android:baselineAlignBottom">true</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:textSize">16sp</item>
+		<item name="android:singleLine">true</item>
+		<item name="android:width">220sp</item>
+		<item name="android:ellipsize">end</item>
 	</style>
 	
 	<style name="EpisodeNum">
