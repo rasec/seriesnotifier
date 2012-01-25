@@ -65,7 +65,8 @@ public class CheckUpdates extends Service {
 	
 	@Override
 	public void onDestroy() {
-		
+		Toast.makeText(this, "Paramos el servicio", Toast.LENGTH_SHORT).show();
+
 	}
 	
 	private class MyBinder extends Binder {
@@ -80,16 +81,17 @@ public class CheckUpdates extends Service {
 		
 		if(!serviceActive) {
 			getPreferencesData();
-			System.out.println(diference);
-			//timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
-			timer.scheduleAtFixedRate(checkUpdates, 1000*60*5, 1000*60*10);
+			//int horas = (int) ((diference/1000)/60/60);
+			//System.out.println("Horas hasta notificacion: " + horas );
+			timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
+			//timer.scheduleAtFixedRate(checkUpdates, 0, 1000*60*10);
 			serviceActive = true;
 		} 
 	}
 	
 	private void getPreferencesData() {
 		days = new Integer( checkForUpdatesFrecuence.getInt("checkForUpdatesFrecuence", 1) );
-		hour = new Integer( checkForUpdatesHour.getInt("checkForUpdatesHour", 16) );
+		hour = new Integer( checkForUpdatesHour.getInt("checkForUpdatesHour", 20) );
 		Date now = new Date();
 		DiferentTimes dT = new DiferentTimes(now, hour);
 		diference = dT.getDiference();
@@ -99,7 +101,6 @@ public class CheckUpdates extends Service {
     { 
         public void run()  
         { 
-        	System.out.println("Lanzamos el UpdateChecker");
         	episodiosNuevos = SeriesUtils.getUpdatesService(getApplicationContext());
             if(episodiosNuevos != null && episodiosNuevos.size() > 0) {
     			createNotification("(" + episodiosNuevos.size() + ")");
@@ -132,7 +133,11 @@ public class CheckUpdates extends Service {
 	    CharSequence text =  desc + " " + getString(R.string.newEpisode);
 	    long when = System.currentTimeMillis();
 	    Notification note = new Notification(icon, text, when);
-	    //note.defaults |= Notification.DEFAULT_VIBRATE;
+	    
+	    note.ledARGB = 0xff00ff00;
+	    note.ledOnMS = 300;
+	    note.ledOffMS = 1000;
+	    note.flags |= Notification.FLAG_SHOW_LIGHTS;
 	    
 	    // Create the expanded message and the Intent
 	    Context context = getApplicationContext();
