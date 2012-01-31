@@ -3,7 +3,7 @@
     <string name="app_name">Series Notifier</string>
     <string name="search_series">Buscar Series</string>
     <string name="own_series">Series Elegidas</string>
-    <string name="settings">Opciones</string>
+    <string name="settings">Preferencias</string>
     
     <string name="search">Buscar</string>
     <string name="my_series">Mis Series</string>
@@ -59,7 +59,7 @@
     <string name="searching">Buscando...</string>
     <string name="progress">Progreso</string>
     
-    <string name="textInputSerieSearch">Buscar series:</string>
+    <string name="textInputSerieSearch">Buscar por nombre...</string>
     <string name="textInputSerieAdd">Escriba el nombre de una serie para añadir:</string>
     <string name="emptySerieSearch">No se han encontrado coincidencias, prueba escribir el nombre completo de la serie</string>
     

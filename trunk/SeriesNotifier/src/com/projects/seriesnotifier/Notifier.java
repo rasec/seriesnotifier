@@ -67,4 +67,11 @@ public class Notifier extends TabActivity {
         	tabHost.setCurrentTab(0);
         }
     }
+    
+    @Override
+    public void onRestart(){
+    	super.onRestart();
+    	Intent service = new Intent().setClass(this, CheckUpdates.class);
+ 		startService(service);
+    }
 }
