@@ -17,11 +17,9 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.projects.series.Episode;
-import com.projects.series.Serie;
 import com.projects.seriesnotifier.Notifier;
 import com.projects.seriesnotifier.R;
 import com.projects.utils.SeriesUtils;
@@ -38,7 +36,9 @@ public class CheckUpdates extends Service {
 	int hour;
 	long diference;
 	SharedPreferences checkForUpdatesFrecuence; 
-	SharedPreferences checkForUpdatesHour; 
+	SharedPreferences checkForUpdatesHour;
+	
+	MyTimerTask checkUpdates;
 	
 	
 	// This is the object that receives interactions from clients.  See
@@ -75,18 +75,36 @@ public class CheckUpdates extends Service {
 	
 	public void handleCommand(){
 		// Comprobamos cada día
+		
 		context = getApplicationContext();
 		checkForUpdatesFrecuence = context.getSharedPreferences("checkForUpdatesFrecuence", Activity.MODE_PRIVATE);
 		checkForUpdatesHour = context.getSharedPreferences("checkForUpdatesHour", Activity.MODE_PRIVATE);
+		boolean changed = preferencesChanged();
 		
-		if(!serviceActive) {
+		if(!serviceActive || changed) {
 			getPreferencesData();
-			//int horas = (int) ((diference/1000)/60/60);
-			//System.out.println("Horas hasta notificacion: " + horas );
+			int horas = (int) ((diference/1000)/60/60);
+			System.out.println("Horas hasta notificacion: " + horas );
+			this.checkUpdates = new MyTimerTask();
 			timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
 			//timer.scheduleAtFixedRate(checkUpdates, 0, 1000*60*10);
 			serviceActive = true;
-		} 
+		} else {
+			System.out.println("servicio activo");
+		}
+	}
+	
+	private boolean preferencesChanged()
+	{
+		boolean changed = false;
+		int days, hour;
+		
+		days = new Integer( checkForUpdatesFrecuence.getInt("checkForUpdatesFrecuence", 1) );
+		hour = new Integer( checkForUpdatesHour.getInt("checkForUpdatesHour", 20) );
+		
+		changed = (this.days != days || this.hour != hour ) ?	true : false;
+		
+		return changed;
 	}
 	
 	private void getPreferencesData() {
@@ -97,7 +115,7 @@ public class CheckUpdates extends Service {
 		diference = dT.getDiference();
 	}
 	
-	private TimerTask checkUpdates = new TimerTask() 
+	private class MyTimerTask extends TimerTask
     { 
         public void run()  
         { 
@@ -108,20 +126,8 @@ public class CheckUpdates extends Service {
     			createNotification("No hay capítulos nuevos");
     		}
         } 
-    }; 
+    }
     	
-	
-	private void showToast(String message){
-		int duration = Toast.LENGTH_SHORT;
-		Toast toast = Toast.makeText(context, message, duration);
-		toast.show();
-	}
-	
-	private List<Episode> checkUpdates(){
-		List<Episode> episodiosNuevos = SeriesUtils.getUpdatesService(getApplicationContext());
-		return episodiosNuevos;
-	}
-	
 	private void createNotification(CharSequence desc){
 		System.out.println("Creamos la notificacion: " + desc);
 		// Create the Notification Manager in the Notification Context

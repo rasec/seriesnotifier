@@ -2,11 +2,11 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:key="first_preferencescreen">
-    <CheckBoxPreference
+    <!-- <CheckBoxPreference
             android:key="emailNotifications"
             android:title="Notificar via email"
             android:summary="Indique si quiere que se mande un email para notificarle nuevas series"
-            android:defaultValue="false" />
+            android:defaultValue="false" /> -->
      <EditTextPreference
      		android:id="@+id/checkForUpdatesFrecuenceDialog"
             android:key="checkForUpdatesFrecuence"
