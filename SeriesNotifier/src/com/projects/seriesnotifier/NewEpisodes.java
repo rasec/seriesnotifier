@@ -8,6 +8,7 @@ import com.projects.series.Serie;
 import com.projects.seriesnotifier.OwnSeries.CommandDeleteSerie;
 import com.projects.seriesnotifier.OwnSeries.IconListViewAdapterDelete;
 import com.projects.utils.SeriesUtils;
+import com.projects.widgets.NumberPicker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,12 +17,14 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -47,22 +50,27 @@ public class NewEpisodes extends ListActivity{
 	}
 	
 	public void showConfirmDialog(CharSequence episodeName, int id){
-    	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-    	dialog.setMessage(getString(R.string.askToDeleteEpisode) + episodeName)
-    	.setPositiveButton(getString(R.string.Ok), new CommandUpdateEpisode(episodeName, id))
+		LayoutInflater inflater = getLayoutInflater();
+    	View dialoglayout = inflater.inflate(R.layout.value_picker, (ViewGroup) findViewById(R.id.valueId));
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+    	dialog
+    	//.setMessage(getString(R.string.askToDeleteEpisode) + episodeName)
+    	.setPositiveButton(getString(R.string.Ok), new CommandUpdateEpisode(dialoglayout, episodeName, id))
     	.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 	           public void onClick(DialogInterface dialog, int id) {
 	                dialog.dismiss();
 	           }
 	       });
+    	   	
+    	dialog.setView(dialoglayout);
     	AlertDialog alert = dialog.create();
     	alert.show();
     }
 	
-	private void deleteElement(CharSequence name, int id) {
+	private void deleteElement(int value, CharSequence name, int id, Context context) {
 		String message = "";
-
-		int ret = (int)SeriesUtils.updateDBSeriesUpdates(getApplicationContext(), id);
+		SeriesUtils.rateSerie(id, value, context);
+		int ret = (int)SeriesUtils.updateDBSeriesUpdates(getApplicationContext(), id, value);
 
 		List<Episode> episodes = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
 		List<String> episodeString = new ArrayList<String>();
@@ -178,15 +186,19 @@ public class NewEpisodes extends ListActivity{
 		
 		  private CharSequence episodeName;
 		  private int id;
-		  public CommandUpdateEpisode(CharSequence episodeName, int id) {
+		  private View v;
+		  public CommandUpdateEpisode(View v, CharSequence episodeName, int id) {
 			  this.id = id;
 			  this.episodeName = episodeName;
+			  this.v = v;
 		
 		  }
 		  
 		  public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
-			deleteElement(this.episodeName, this.id);		
+			NumberPicker nP = (NumberPicker)((LinearLayout)v).getChildAt(1);
+			int value = nP.getCurrent();
+			deleteElement(value, this.episodeName, this.id, getApplicationContext());		
 		  }		
 	}
 

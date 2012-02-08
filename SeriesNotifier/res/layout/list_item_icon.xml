@@ -18,5 +18,4 @@
 		style="@style/ListIcon"
 		android:src="@drawable/star_grey"
 		android:layout_gravity="center_horizontal" />
-	
 </RelativeLayout>

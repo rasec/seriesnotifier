@@ -7,6 +7,7 @@
     
     <string name="search">Buscar</string>
     <string name="my_series">Mis Series</string>
+    <string name="recommendations">Top Series</string>
 
     <string name="hello">Hello World, Notifier!</string>
     <string name="head"> Series Notifier </string>
@@ -21,13 +22,15 @@
     <string name="getSeriesParam">seriesname</string>
     <string name="apiKey">121E6F2A75E6F1FC</string>
     <string name="infoSerieUrl">http://www.thetvdb.com/api/121E6F2A75E6F1FC/series/</string>
-    <string name="infoSerieUrlEnd">/all/es.xml</string>
+    <string name="infoSerieUrlEnd">/es.xml</string>
     <string name="bannerUrl">http://www.thetvdb.com/banners/_cache/</string>
     <string name="getUpdates">http://www.thetvdb.com/api/Updates.php</string>
     <string name="getUpdatesService">http://www.seriesnotifier.com/series/updates?format=xml</string>
     <string name="getUpdatesTimeParam">time</string>
     <string name="getUpdatesSeriesParam">series</string>
-    
+    <string name="rateEpisodeUrl">http://www.seriesnotifier.com/series/voteEpisode</string>
+    <string name="idParam">id</string>
+    <string name="rateParam">vote</string>
     
     <string name="getSeriesTvRange">http://services.tvrage.com/feeds/search.php</string>
     <string name="getSeriesParamTvRange">show</string>
@@ -63,8 +66,9 @@
     <string name="textInputSerieAdd">Escriba el nombre de una serie para añadir:</string>
     <string name="emptySerieSearch">No se han encontrado coincidencias, prueba escribir el nombre completo de la serie</string>
     
+    <string name="Rating">Valoración:</string>
     <string name="DescTitle"><u>Descripción</u></string>
-    <string name="EstadoTitle"><u>Estado</u></string>
+    <string name="EstadoTitle">Estado:</string>
     
     <string name="Continuing">Continua emitiendose</string>
     <string name="Ended">Finalizada</string>

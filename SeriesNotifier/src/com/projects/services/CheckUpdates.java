@@ -87,7 +87,7 @@ public class CheckUpdates extends Service {
 			System.out.println("Horas hasta notificacion: " + horas );
 			this.checkUpdates = new MyTimerTask();
 			timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
-			//timer.scheduleAtFixedRate(checkUpdates, 0, 1000*60*10);
+			//timer.scheduleAtFixedRate(checkUpdates, 1000*60, 1000*60*10);
 			serviceActive = true;
 		} else {
 			System.out.println("servicio activo");

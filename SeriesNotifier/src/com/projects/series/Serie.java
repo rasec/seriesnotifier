@@ -11,6 +11,8 @@ public class Serie {
 	private String imgUrl;
 	private String estado;
 	private boolean fav;
+	private String rate;
+	private String votes;
 	
 	public Serie()
 	{
@@ -43,6 +45,17 @@ public class Serie {
 		this.desc = desc;
 		this.imgUrl = imgUrl;
 		this.estado = estado;
+	}
+	
+	public Serie(String name, String id, String desc, String imgUrl, String estado, String rate, String votes)
+	{
+		this.name = name;
+		this.id = id;
+		this.desc = desc;
+		this.imgUrl = imgUrl;
+		this.estado = estado;
+		this.rate = rate;
+		this.votes = votes;
 	}
 
 	public String getName() {
@@ -99,6 +112,22 @@ public class Serie {
 	public void setFav(boolean fav)
 	{
 		this.fav = fav;
+	}
+
+	public void setRate(String rate) {
+		this.rate = rate;
+	}
+
+	public String getRate() {
+		return rate;
+	}
+
+	public void setVotes(String votes) {
+		this.votes = votes;
+	}
+
+	public String getVotes() {
+		return votes;
 	}
 
 }

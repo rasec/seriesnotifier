@@ -47,7 +47,7 @@ public class NumberPicker extends LinearLayout implements OnClickListener,
         OnFocusChangeListener, OnLongClickListener {
 
     private static final String TAG = "NumberPicker";
-    private static final int DEFAULT_MAX = 200;
+    private static final int DEFAULT_MAX = 10;
     private static final int DEFAULT_MIN = 0;
 
     public interface OnChangedListener {
@@ -226,13 +226,13 @@ public class NumberPicker extends LinearLayout implements OnClickListener,
 
         // Wrap around the values if we go past the start or end
         if (current > mEnd) {
-            current = mStart;
+            current = mCurrent;
         } else if (current < mStart) {
-            current = mEnd;
+            current = mCurrent;
         }
         mPrevious = mCurrent;
         mCurrent = current;
-
+        
         notifyChange();
         updateView();
     }

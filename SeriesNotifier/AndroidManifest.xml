@@ -16,6 +16,8 @@
         
         <activity android:name=".OwnSeries" android:label="@string/own_series"></activity>
         
+         <activity android:name=".Recommendations" android:label="@string/recommendations"> </activity>
+        
         <activity android:name=".OwnSeriesClean" android:label="@string/own_series"></activity>
         
         <activity android:name=".Settings" android:label="@string/settings"> </activity>

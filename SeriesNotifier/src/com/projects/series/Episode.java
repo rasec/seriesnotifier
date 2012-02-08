@@ -7,6 +7,7 @@ public class Episode {
 	private String season;
 	private String episode;
 	private String date;
+	private float rate;
 	private boolean alreadyShowed = false;
 	
 	public Episode()
@@ -14,7 +15,7 @@ public class Episode {
 		
 	}
 	
-	public Episode(String id, String serieId, String serieName, String season, String episode, String date)
+	public Episode(String id, String serieId, String serieName, String season, String episode, String date, float rate)
 	{
 		this.id = id;
 		this.serieId = serieId;
@@ -22,6 +23,7 @@ public class Episode {
 		this.season = season;
 		this.episode = episode;
 		this.date = date;
+		this.setRate(rate);
 	}
 	
 	public String getId() {
@@ -78,6 +80,14 @@ public class Episode {
 
 	public void markAsShowed() {
 		this.alreadyShowed = true;
+	}
+
+	public void setRate(float rate) {
+		this.rate = rate;
+	}
+
+	public float getRate() {
+		return rate;
 	}
 
 }

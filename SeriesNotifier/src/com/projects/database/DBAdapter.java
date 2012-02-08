@@ -37,6 +37,10 @@ public class DBAdapter {
 	
 	public static final String KEY_VISTO="visto";
 	
+	public static final String KEY_RATE="rate";
+	
+	public static final String KEY_VOTE="vote";
+	
 	public static final String KEY_EPOCH="epoch";
 	
 	public static final int NAME_COLUMN = 1;
@@ -53,6 +57,8 @@ public class DBAdapter {
 							KEY_SEASON + " text not null, " +
 							KEY_EPISODE + " text not null, " +
 							KEY_DATE + " text not null, " +
+							KEY_RATE + " float not null, " +
+							KEY_VOTE + " integer not null, " +
 							"" + KEY_VISTO + " BOOLEAN);";
 	
 	private static final String CREATE_TABLE_EPOCH = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE_EPOCH_DATE + " (" + KEY_ID + " text primary key, "
@@ -84,7 +90,7 @@ public class DBAdapter {
 		return db.insert(DATABASE_TABLE_SERIES, null, initialValues);
 	}
 	
-	public long insertSerieUpdate(int id, int serieid, String seriename, String season, String episode, String date) {
+	public long insertSerieUpdate(int id, int serieid, String seriename, String season, String episode, float rate, String date) {
 		long ret = 0;
 		ContentValues initialValues = new ContentValues();
 		Cursor series = getSeriesUpdates(id);
@@ -92,14 +98,16 @@ public class DBAdapter {
 		if (series.getCount()>0) {
 			series.moveToFirst();
 			series.moveToPosition(0);
-			initialValues.put(KEY_ID, series.getString(0));
-			initialValues.put(KEY_SERIEID, series.getString(1));
-			initialValues.put(KEY_SERIENAME, series.getString(2));
-			initialValues.put(KEY_SEASON, series.getString(3));
-			initialValues.put(KEY_EPISODE, series.getString(4));
-			initialValues.put(KEY_DATE, series.getString(5));
+			initialValues.put(KEY_ID, id);
+			initialValues.put(KEY_SERIEID, serieid);
+			initialValues.put(KEY_SERIENAME, seriename);
+			initialValues.put(KEY_SEASON, season);
+			initialValues.put(KEY_EPISODE, episode);
+			initialValues.put(KEY_RATE, rate);
+			initialValues.put(KEY_DATE, date);
+			initialValues.put(KEY_VOTE, series.getInt(8));
 			initialValues.put(KEY_VISTO, 0);
-			ret = db.update(DATABASE_TABLE_SERIES_UPDATES, initialValues, KEY_ID + " = " + series.getString(0), null);
+			ret = db.update(DATABASE_TABLE_SERIES_UPDATES, initialValues, KEY_ID + " = " + id, null);
 		} else {
 			initialValues.put(KEY_ID, id);
 			initialValues.put(KEY_SERIEID, serieid);
@@ -107,7 +115,9 @@ public class DBAdapter {
 			initialValues.put(KEY_SEASON, season);
 			initialValues.put(KEY_EPISODE, episode);
 			initialValues.put(KEY_DATE, date);
+			initialValues.put(KEY_RATE, rate);
 			initialValues.put(KEY_VISTO, 0);
+			initialValues.put(KEY_VOTE, 0);
 			ret = db.insert(DATABASE_TABLE_SERIES_UPDATES, null, initialValues);
 			
 		}
@@ -172,12 +182,12 @@ public class DBAdapter {
 	}
 	
 	public Cursor getSeriesUpdates() {
-		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_SERIEID, KEY_SERIENAME, KEY_SEASON, KEY_EPISODE, "strftime('%d/%m/%Y',"+ KEY_DATE+")", KEY_VISTO },
+		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_SERIEID, KEY_SERIENAME, KEY_SEASON, KEY_EPISODE, "strftime('%d/%m/%Y',"+ KEY_DATE+")", KEY_RATE, KEY_VISTO },
 				KEY_VISTO +" = 0", null, null, null, "date desc");
 	}
 	
 	public Cursor getSeriesUpdates(int id) {
-		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_SERIEID, KEY_SERIENAME, KEY_SEASON, KEY_EPISODE, KEY_DATE },
+		return db.query(DATABASE_TABLE_SERIES_UPDATES, new String[] { KEY_ID, KEY_SERIEID, KEY_SERIENAME, KEY_SEASON, KEY_EPISODE, KEY_RATE, KEY_DATE },
 				KEY_ID + " = " + id, null, null, null, null);
 	}
 	
@@ -186,9 +196,10 @@ public class DBAdapter {
 				null, null, null, null, KEY_EPOCH);
 	}
 	
-	public int updateSeriesUpdates(int id) {
+	public int updateSeriesUpdates(int id, int value) {
 		ContentValues updatesValues = new ContentValues();
 		updatesValues.put(KEY_VISTO, 1);
+		updatesValues.put(KEY_VOTE, value);
 		return db.update(DATABASE_TABLE_SERIES_UPDATES, updatesValues, KEY_ID + " = " + id, null);
 	}
 

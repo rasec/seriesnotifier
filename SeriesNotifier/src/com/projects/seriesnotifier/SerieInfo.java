@@ -202,6 +202,7 @@ public class SerieInfo extends Activity {
         img.setImageDrawable(drawable);
         
         TextView title = (TextView)findViewById(R.id.title);
+        TextView rating = (TextView)findViewById(R.id.ratingValue);
         TextView desc = (TextView)findViewById(R.id.desc);
         ImageView icon = (ImageView)findViewById(R.id.icon);
         TextView stat = (TextView)findViewById(R.id.stat);
@@ -215,6 +216,7 @@ public class SerieInfo extends Activity {
         
         
         title.setText(serie.getName());
+        rating.setText(serie.getRate());
         desc.setText(serie.getDesc());
         stat.setText(serie.getEstado());
         
