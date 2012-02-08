@@ -32,13 +32,29 @@
 			android:layout_alignTop="@id/title"
 			style="@style/SerieInfoImage"
 			android:src="@drawable/favorite" />
-	    
+	    <TextView
+	        android:id="@+id/rating"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/Rating"
+	        android:layout_below="@id/title"
+	        style="@style/rating"
+	        />
+        <TextView
+	        android:id="@+id/ratingValue"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_toRightOf="@id/rating"
+	        android:layout_below="@id/title"
+	        android:layout_marginLeft="10sp"
+	        style="@style/rating"
+	        />
 	    <TextView
 	        android:id="@+id/description"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:text="@string/DescTitle"
-	        android:layout_below="@id/icon"
+	        android:layout_below="@id/rating"
 	        style="@style/DescTitle"
 	        />
 		<TextView
@@ -51,18 +67,20 @@
 	        
 	    <TextView
 	        android:id="@+id/statTitle"
-	        android:layout_width="fill_parent"
+	        android:layout_width="wrap_content"
 	        android:layout_height="fill_parent"
 	        android:text="@string/EstadoTitle"
 	        android:layout_below="@id/desc"
-	        style="@style/DescTitle"
+	        style="@style/rating"
 	        />
 		<TextView
 	        android:id="@+id/stat"
-	        android:layout_width="fill_parent"
+	        android:layout_width="wrap_content"
 	        android:layout_height="fill_parent"
-	        android:layout_below="@id/statTitle"
-	        style="@style/TextDesc"
+	        android:layout_toRightOf="@id/statTitle"
+	        android:layout_below="@id/desc"
+	        android:layout_marginLeft="10sp"
+	        style="@style/rating"
 	        />
 	          
 	</RelativeLayout>

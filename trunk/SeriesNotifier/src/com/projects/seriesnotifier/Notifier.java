@@ -48,21 +48,28 @@ public class Notifier extends TabActivity {
                       .setContent(intent);
         tabHost.addTab(spec);
         
+        // Do the same for the other tabs
+        intent = new Intent().setClass(this, Recommendations.class);
+        spec = tabHost.newTabSpec("Recommendations").setIndicator(getString(R.string.recommendations),
+                          res.getDrawable(R.drawable.tab_own_series))
+                      .setContent(intent);
+        tabHost.addTab(spec);
+        
         intent = new Intent().setClass(this, NewEpisodes.class);
         spec = tabHost.newTabSpec("NewEpisodes").setIndicator(getString(R.string.new_episode_title),
                           res.getDrawable(R.drawable.tab_new_episodes))
                       .setContent(intent);
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, Settings.class);
+        /*intent = new Intent().setClass(this, Settings.class);
         spec = tabHost.newTabSpec("Settings").setIndicator(getString(R.string.settings),
                           res.getDrawable(R.drawable.tab_settings))
                       .setContent(intent);
-        tabHost.addTab(spec);
+        tabHost.addTab(spec);*/
         
        
         if(notify){
-        	tabHost.setCurrentTab(2);
+        	tabHost.setCurrentTab(3);
         } else {
         	tabHost.setCurrentTab(0);
         }

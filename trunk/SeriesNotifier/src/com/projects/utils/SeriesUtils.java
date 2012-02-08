@@ -407,14 +407,17 @@ public class SeriesUtils {
 			for(int i = 0; i < cols; i++)
 			{
 				episode = new Episode();
+				
 				System.out.println("Posicion en la table: " + cursor.getPosition() + "ID: " + cursor.getString(cursor.getColumnIndex("_id")));
 				episode.setId(cursor.getString(cursor.getColumnIndex("_id")));
 				episode.setSerieId(cursor.getString(1));
+				updateEpisodeRate(episode.getId(), context);
 				episode.setSerieName(cursor.getString(2));
 				episode.setSeason(cursor.getString(3));
 				episode.setEpisode(cursor.getString(4));
 				episode.setDate(cursor.getString(5));
-				if(cursor.getInt(6) == 1) episode.markAsShowed();
+				episode.setRate(cursor.getFloat(6));
+				if(cursor.getInt(7) == 1) episode.markAsShowed();
 				episodes.add(episode);
 				cursor.moveToNext();
 			}
@@ -424,6 +427,10 @@ public class SeriesUtils {
 		return episodes;		  
 	}
 	
+	private static void updateEpisodeRate(String id, Context context) {
+		//TODO: hacer, que esto no está
+	}
+
 	public static long addDBSerie(String serie, int id, Context context){
 		DBAdapter db = new DBAdapter(context);
 		long ret = 0;
@@ -437,7 +444,7 @@ public class SeriesUtils {
 		DBAdapter db = new DBAdapter(context);
 		long ret = 0;
 		db.open();
-		ret =  db.insertSerieUpdate(Integer.parseInt(ep.getId()), Integer.parseInt(ep.getSerieId()), ep.getSerieName(), ep.getSeason(), ep.getEpisode(), ep.getDate());
+		ret =  db.insertSerieUpdate(Integer.parseInt(ep.getId()), Integer.parseInt(ep.getSerieId()), ep.getSerieName(), ep.getSeason(), ep.getEpisode(), ep.getRate(),ep.getDate());
 		db.close();
 		return ret;
 	}
@@ -469,13 +476,13 @@ public class SeriesUtils {
 	}
 	
 	
-	public static int updateDBSeriesUpdates(Context context, int id)
+	public static int updateDBSeriesUpdates(Context context, int id, int value)
 	{
 		DBAdapter db = new DBAdapter(context);
 		int ret;
 		db.open();
 		
-		ret = db.updateSeriesUpdates(id);
+		ret = db.updateSeriesUpdates(id, value);
   
 		db.close();
 		return ret;
@@ -643,17 +650,20 @@ public class SeriesUtils {
 							   (Element)entry.getElementsByTagName("banner").item(0);
 						Element SerieState =
 							   (Element)entry.getElementsByTagName("Status").item(0);
+						Element SerieRating =
+							   (Element)entry.getElementsByTagName("Rating").item(0);
 						//String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
 						//if(ended.equals("0")){
 							serie = new Serie();
 							serie.setName(SerieName.getFirstChild().getNodeValue());
 							serie.setId(SerieId.getFirstChild().getNodeValue());
+							serie.setRate(SerieRating.getFirstChild().getNodeValue());
 							if(SerieDesc.getFirstChild()!=null)
 							serie.setDesc(SerieDesc.getFirstChild().getNodeValue());
 							if(SerieImgUrl.getFirstChild()!=null)
 							serie.setImgUrl(SerieImgUrl.getFirstChild().getNodeValue());
 							if(SerieState.getFirstChild()!=null)
-							serie.setEstado(SerieState.getFirstChild().getNodeValue(), context);
+							serie.setEstado(SerieState.getFirstChild().getNodeValue(), context);							
 							boolean exists = serieAlreadyExists(Integer.parseInt(serie.getId()), context);
 							serie.setFav(exists);	
 						//}
@@ -795,6 +805,9 @@ public class SeriesUtils {
 						Node seasonNumber = episode.getChildNodes().item(3);
 						Node episodeNumber = episode.getChildNodes().item(4);
 						Node date = episode.getChildNodes().item(5);
+						Node rate = episode.getChildNodes().item(6);
+						Node votes = episode.getChildNodes().item(7);
+						
 						//String ended = ((Element)entry.getElementsByTagName("ended").item(0)).getFirstChild().getNodeValue();
 						//if(ended.equals("0")){
 							ep = new Episode();
@@ -803,6 +816,8 @@ public class SeriesUtils {
 							ep.setSerieName(seriename.getFirstChild().getNodeValue());
 							ep.setSeason(seasonNumber.getFirstChild().getNodeValue());
 							ep.setEpisode(episodeNumber.getFirstChild().getNodeValue());
+							int numVotes = (((Integer.parseInt(votes.getFirstChild().getNodeValue()) != 0)) ? Integer.parseInt(votes.getFirstChild().getNodeValue()) : 1);
+							ep.setRate((float)Integer.parseInt(rate.getFirstChild().getNodeValue()) / (float)numVotes);
 							ep.setDate(date.getFirstChild().getNodeValue());
 							episodesNuevos.add(ep);
 							addDBSerieUpdates(ep, context);
@@ -861,6 +876,106 @@ public class SeriesUtils {
 			}
 		}
 		return myUpdatesSeries;
+	}
+
+	public static void rateSerie(int id, int value, Context context) {
+		// TODO Auto-generated method stub
+		URL url;
+		String site = context.getString(R.string.rateEpisodeUrl);
+		String rateParam = context.getString(R.string.rateParam);
+		String idParam = context.getString(R.string.idParam);
+		try {
+			url = new URL(site+"?" + rateParam + "=" + value + "&" + idParam + "=" + id);
+			System.out.println("URL: " + url);
+			URLConnection connection;
+		
+			connection = url.openConnection();
+		
+			HttpURLConnection httpConnection = (HttpURLConnection)connection;
+			int responseCode;
+		
+			responseCode = httpConnection.getResponseCode();
+			if(responseCode == HttpURLConnection.HTTP_OK){
+				System.out.println("Votado");
+			} else {
+				System.out.println("Error en la votacion");
+			}
+		}  catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+	}
+
+	public static List<Serie> getRecommendations(Context context) {
+		URL url;
+		Serie serie;
+		List<Serie> recommendations = new ArrayList<Serie>();
+		
+		String site = "http://www.seriesnotifier.com/series/seriesByRate";
+
+		try 
+		{
+			url = new URL(site);
+			System.out.println("URL: " + url);
+			URLConnection connection;
+			connection = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection)connection;
+			int responseCode = httpConnection.getResponseCode();
+			if(responseCode == HttpURLConnection.HTTP_OK){
+				
+				InputStream in = httpConnection.getInputStream();
+				DocumentBuilderFactory dbf;
+				dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				// 
+				Document dom = db.parse(in);
+				Element docEle = dom.getDocumentElement();
+				// 
+				NodeList nl = docEle.getElementsByTagName("serie");
+				if (nl != null && nl.getLength() > 0) {
+					for (int i = 0 ; i < nl.getLength(); i++) {
+						Element nSerie = (Element)nl.item(i);
+						Node id = nSerie.getChildNodes().item(0);
+						Node seriename = nSerie.getChildNodes().item(1);
+						Node rate = nSerie.getChildNodes().item(2);
+						Node votes = nSerie.getChildNodes().item(3);
+						
+						serie = new Serie();
+						serie.setId(id.getFirstChild().getNodeValue());
+						serie.setName(seriename.getFirstChild().getNodeValue());
+						serie.setRate(rate.getFirstChild().getNodeValue());
+						serie.setVotes(votes.getFirstChild().getNodeValue());
+						serie.setFav(serieAlreadyExists(Integer.parseInt(serie.getId()), context));
+						recommendations.add(serie);
+						
+						
+					}
+				}
+				
+			} 
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return recommendations;
 	}
 	
 }
