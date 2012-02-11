@@ -4,6 +4,7 @@
     <string name="search_series">Buscar Series</string>
     <string name="own_series">Series Elegidas</string>
     <string name="settings">Preferencias</string>
+    <string name="settingsActivityName">Series Notifier: Preferencias</string>
     
     <string name="search">Buscar</string>
     <string name="my_series">Mis Series</string>

@@ -20,7 +20,7 @@
         
         <activity android:name=".OwnSeriesClean" android:label="@string/own_series"></activity>
         
-        <activity android:name=".Settings" android:label="@string/settings"> </activity>
+        <activity android:name=".Settings" android:label="@string/settingsActivityName"> </activity>
         
         <activity android:name=".NewEpisodes" android:label="@string/new_episode"> </activity>
         

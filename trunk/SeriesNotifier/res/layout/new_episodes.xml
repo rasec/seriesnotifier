@@ -10,7 +10,7 @@
 		android:layout_width="wrap_content"
     	android:layout_height="fill_parent"
 		style="@style/LeftIcon"
-		android:src="@drawable/check_trans"
+		android:src="@drawable/tick36"
 		android:layout_gravity="center_vertical" />
 	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:orientation="vertical"
@@ -31,21 +31,20 @@
 		    	android:layout_height="wrap_content"
 		    	style="@style/EpisodeNum" >
 		    </TextView>
-		
-		   <!--  <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-				android:id="@+id/EpisodeName"
-				android:layout_below="@id/SerieName"
-				android:layout_width="wrap_content"
-		    	android:layout_height="wrap_content"
-		    	style="@style/EpisodeName" >
-		    </TextView>
-		    --> 
+		    
 		    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
 				android:id="@+id/Date"
 				android:layout_below="@id/SerieName"
 				android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
 		    	style="@style/Date" >
+		    </TextView>
+		    
+		     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+id/EpisodeRate"
+				android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	style="@style/EpisodeRate" >
 		    </TextView>
 		</RelativeLayout>
 	

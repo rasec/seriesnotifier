@@ -383,10 +383,8 @@ public class SeriesUtils {
 	private static boolean serieAlreadyExistsDB(int id, Context context)
 	{
 		boolean exists = false;
-		System.out.println("Contexto: " + context.toString());
 		DBAdapter db = new DBAdapter(context);
 		db.open();
-		System.out.println("Adapter: " + db);
 		exists = db.existsSerie(id);
 		db.close();
 		return exists;
@@ -976,6 +974,76 @@ public class SeriesUtils {
 		}
 		
 		return recommendations;
+	}
+
+	public static List<Episode> updateRateSeriesUpdates(List<Episode> episodes, Context applicationContext) {
+		// TODO Auto-generated method stub
+		String id;
+		float rate;
+		for (Episode episode : episodes) {
+			id = episode.getId();
+			rate = Float.parseFloat(getRate(id));
+			rate = (float) (Math.round(rate*100.0)/100.0);
+			episode.setRate(rate);
+			DBAdapter db = new DBAdapter(applicationContext);
+			db.open();
+			db.updateSeriesUpdates(Integer.parseInt(id), rate);
+			db.close();
+		}
+		
+		return episodes;
+		
+	}
+
+	private static String getRate(String id) {
+		URL url;
+		String rate = "";
+		String site = "http://www.seriesnotifier.com/series/getRate";
+
+		try 
+		{
+			url = new URL(site + "?id=" + id);
+			System.out.println("URL: " + url);
+			URLConnection connection;
+			connection = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection)connection;
+			int responseCode = httpConnection.getResponseCode();
+			if(responseCode == HttpURLConnection.HTTP_OK){
+				
+				InputStream in = httpConnection.getInputStream();
+				DocumentBuilderFactory dbf;
+				dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				// 
+				Document dom = db.parse(in);
+				Element docEle = dom.getDocumentElement();
+				// 
+				NodeList nl = docEle.getElementsByTagName("rate");
+				if (nl != null && nl.getLength() > 0) {
+					Element nSerie = (Element)nl.item(0);
+					rate = nSerie.getFirstChild().getNodeValue();
+				}
+				
+			} 
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return rate;
 	}
 	
 }
