@@ -85,6 +85,9 @@ public class CheckUpdates extends Service {
 			getPreferencesData();
 			int horas = (int) ((diference/1000)/60/60);
 			System.out.println("Horas hasta notificacion: " + horas );
+			if(this.checkUpdates != null) {
+				this.checkUpdates.cancel();
+			}
 			this.checkUpdates = new MyTimerTask();
 			timer.scheduleAtFixedRate(checkUpdates, diference, DAY_MILI*days);
 			//timer.scheduleAtFixedRate(checkUpdates, 1000*60, 1000*60*10);

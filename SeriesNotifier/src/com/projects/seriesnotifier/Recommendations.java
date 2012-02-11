@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.projects.series.Serie;
 import com.projects.seriesnotifier.NewSearch.CommandAddSerie;
+import com.projects.seriesnotifier.SerieInfo.NewSearchTask;
 import com.projects.utils.SeriesUtils;
 
 import android.app.AlertDialog;
@@ -12,7 +13,10 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +40,15 @@ public class Recommendations extends ListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getRecommendations();        
+        //getRecommendations();  
+        AsyncTask<String, Integer, Boolean> task = new GetRecommendationsTask().execute();
     }   
 	
     @Override
 	public void onResume() {
 		super.onResume();
-		getRecommendations();
+		//getRecommendations();
+		AsyncTask<String, Integer, Boolean> task = new GetRecommendationsTask().execute();
     }
     
     private void getRecommendations() {
@@ -62,7 +68,9 @@ public class Recommendations extends ListActivity {
 
 			lv.setOnItemClickListener(serieClick);
 		}
-	}/*
+	}
+    
+    /*
 	 * Nuevo Listener que se encarga de recoger el click sobre cualquiera
 	 * de los elementos del listado de series. Se encarga de llamar
 	 * al método que abre la ficha de la serie. 
@@ -75,6 +83,51 @@ public class Recommendations extends ListActivity {
 							.getChildAt(0))).getTag())));
 		}
 	};
+	
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			updateView();
+		}
+	};
+	
+	public void updateView() {
+		List<String> seriesString = new ArrayList<String>();
+		for (Serie serie : series) {
+			seriesString.add(serie.getName());
+		}
+		//la = new IconListViewAdapterDelete(this, R.layout.list_item_icon, seriesString, series, R.drawable.remove);
+		la = new IconListViewAdapterAdd(this, R.layout.list_item_icon,seriesString, series, R.drawable.star_grey);
+		setListAdapter(la);
+
+		lv = getListView();
+		lv.setTextFilterEnabled(true);
+		registerForContextMenu(lv);
+
+		lv.setOnItemClickListener(serieClick);
+	}
+	
+	class GetRecommendationsTask extends AsyncTask<String, Integer, Boolean> {
+		  @Override
+		  protected Boolean doInBackground(String... params) {
+		    try {
+		    	series = SeriesUtils.getRecommendations(getApplicationContext());
+		    	handler.sendEmptyMessage(0);
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		    }
+		    return Boolean.TRUE;   // Return your real result here
+		  }
+		  @Override
+		  protected void onPreExecute() {
+		    //showProgressDialog();
+		  }
+		  @Override
+		  protected void onPostExecute(Boolean result) {
+		    // result is the value returned from doInBackground
+		    //removeProgressDialog();
+		  }
+	}
 	
 	/*
 	 * Nuevo Listener que se encarga de recoger el click sobre el 

@@ -202,6 +202,12 @@ public class DBAdapter {
 		updatesValues.put(KEY_VOTE, value);
 		return db.update(DATABASE_TABLE_SERIES_UPDATES, updatesValues, KEY_ID + " = " + id, null);
 	}
+	
+	public int updateSeriesUpdates(int id, float rate) {
+		ContentValues updatesValues = new ContentValues();
+		updatesValues.put(KEY_RATE, rate);
+		return db.update(DATABASE_TABLE_SERIES_UPDATES, updatesValues, KEY_ID + " = " + id, null);
+	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		DatabaseHelper(Context context) {

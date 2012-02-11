@@ -4,30 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.projects.series.Episode;
-import com.projects.series.Serie;
-import com.projects.seriesnotifier.OwnSeries.CommandDeleteSerie;
-import com.projects.seriesnotifier.OwnSeries.IconListViewAdapterDelete;
+import com.projects.seriesnotifier.Recommendations.GetRecommendationsTask;
 import com.projects.utils.SeriesUtils;
 import com.projects.widgets.NumberPicker;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +31,7 @@ import android.widget.Toast;
 public class NewEpisodes extends ListActivity{
 	
 	final int NOTIFICATION_ID = 1;
+	List<Episode> episodes;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +41,16 @@ public class NewEpisodes extends ListActivity{
 	    NotificationManager notMan = (NotificationManager) getSystemService(ns);
 	    notMan.cancel(NOTIFICATION_ID);
 	    
-	    List<Episode> episodes = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
+	    episodes = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
 	    
-	    setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.check_trans));
+	    setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.tick36));
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		episodes = SeriesUtils.getDBSeriesUpdates(getApplicationContext());
+		AsyncTask<String, Integer, Boolean> task = new UpdateRateTask().execute();
 	}
 	
 	public void showConfirmDialog(CharSequence episodeName, int id){
@@ -77,7 +81,7 @@ public class NewEpisodes extends ListActivity{
 		for (Episode e : episodes) {
 			episodeString.add(e.getSerieName() + " " + e.getSeason() +"x"+ e.getEpisode());			
 		}
-		setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.check_trans));
+		setListAdapter(new NewEpisodesAdapter(this, episodes, R.drawable.tick36));
 		
 		if(ret >= 0)
 	 		message = getString(R.string.delEpisode) + name;
@@ -122,8 +126,9 @@ public class NewEpisodes extends ListActivity{
 						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				v = vi.inflate(R.layout.new_episodes, null);
 			}
-			String serieName = items.get(position).getSerieName();
+			String serieName = items.get(position).getSerieName(); 
 			String episodeNum = items.get(position).getSeason() + "x" + items.get(position).getEpisode();
+			String episodeRate = "Nota: " + (items.get(position).getRate() != 0 ? items.get(position).getRate() : "-");
 			String date = items.get(position).getDate();
 			String id = items.get(position).getId();
 
@@ -131,6 +136,7 @@ public class NewEpisodes extends ListActivity{
 
 			TextView tt = (TextView) v.findViewById(R.id.SerieName);
 			TextView tEpisodeNum = (TextView) v.findViewById(R.id.EpisodeNum);
+			TextView tEpisodeRate = (TextView) v.findViewById(R.id.EpisodeRate);
 			TextView tdate = (TextView) v.findViewById(R.id.Date);
 			ImageView im = (ImageView) v.findViewById(R.id.listIcon);
 
@@ -149,6 +155,9 @@ public class NewEpisodes extends ListActivity{
 			}
 			if(tEpisodeNum!=null) {
 				tEpisodeNum.setText(episodeNum);
+			}
+			if(tEpisodeRate!=null) {
+				tEpisodeRate.setText(episodeRate);
 			}
 			if(tdate!=null) {
 				tdate.setText(getString(R.string.date) + " " +  date);
@@ -201,5 +210,34 @@ public class NewEpisodes extends ListActivity{
 			deleteElement(value, this.episodeName, this.id, getApplicationContext());		
 		  }		
 	}
+	
+	class UpdateRateTask extends AsyncTask<String, Integer, Boolean> {
+		  @Override
+		  protected Boolean doInBackground(String... params) {
+		    try {
+		    	episodes = SeriesUtils.updateRateSeriesUpdates(episodes, getApplicationContext());
+		    	handler.sendEmptyMessage(0);
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		    }
+		    return Boolean.TRUE;   // Return your real result here
+		  }
+		  @Override
+		  protected void onPreExecute() {
+		    //showProgressDialog();
+		  }
+		  @Override
+		  protected void onPostExecute(Boolean result) {
+		    // result is the value returned from doInBackground
+		    //removeProgressDialog();
+		  }
+	}
+	
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			setListAdapter(new NewEpisodesAdapter(getApplicationContext(), episodes, R.drawable.tick36));
+		}
+	};
 
 }
